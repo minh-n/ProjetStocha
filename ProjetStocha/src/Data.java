@@ -9,15 +9,14 @@ import org.xml.sax.helpers.DefaultHandler;
 
 public class Data{
 
-	protected Object data;
-		
-	private static double matrixCost[][];
+	private static int nbCity;
+	private double matrixCost[][];
 	
-	public Data(File f)
+	public Data()
 	{
 	}
 
-	public static void readInputFile(String filename, boolean verbose)
+	public void readInputFile(String filename, boolean verbose)
 	{
 
 	  try {
@@ -59,10 +58,19 @@ public class Data{
 				if (qName.equalsIgnoreCase("edge")) {
 					isEdgeElement = true;
 					double currentEdgeAttribute = Double.parseDouble(attributes.getValue(0));
-					matrixCost[i][j] = currentEdgeAttribute;
+					if (i != j)
+					{
+						matrixCost[i][j] = currentEdgeAttribute;
+					}
+					else
+					{
+						matrixCost[i][j] = -1;
+						matrixCost[i][j+1] = currentEdgeAttribute;
+						j++;
+					}
 					
-					if(verbose)System.out.println("Filling matrix[ "+ i + " ][ " + j + " ] = " + currentEdgeAttribute );
-					
+					if(verbose)System.out.println("Filling matrix[ "+ i + " ][ " + j + " ] = " + matrixCost[i][j] );
+					//System.out.println("j = " + j);
 				}
 
 			}
@@ -71,6 +79,7 @@ public class Data{
 				String qName) throws SAXException {
 
 				if (qName.equalsIgnoreCase("vertex")) {
+
 					j = 0;
 				}
 				//System.out.println("End Element :" + qName);
@@ -84,10 +93,20 @@ public class Data{
 					
 					String numberString =  new String(ch, start, length);
 					numberString = numberString.replaceAll("\\D+","");
-					int nbCity = Integer.parseInt(numberString);
+					if(numberString.equals(""))
+					{
+						System.out.println("####DEBUG NB VILLE INCONNU");
+						Data.nbCity = Integer.parseInt(filename.replaceAll("\\D+",""));
+					}
+					else
+					{
+						System.out.println("Numbre ville " + numberString);
+						Data.nbCity = Integer.parseInt(numberString);
+					}
 					System.out.println("Number of city in this dataset = " + nbCity);
 					
 					matrixCost = new double[nbCity][nbCity];
+					matrixCost[nbCity-1][nbCity-1] = -1;
 					isDescription = false;
 				}
 				
@@ -105,9 +124,12 @@ public class Data{
 				}
 
 				if (isEdgeElement) {			
-					//System.out.println("Edge number corresponding : " + Integer.valueOf(new String(ch, start, length)));
-					isEdgeElement = false;
+					//System.out.println("Edge number corresponding : " + Integer.valueOf(new String(ch, start, length)));					
+					
 					j++;
+					
+
+					isEdgeElement = false;
 				}
 
 			}
@@ -119,16 +141,27 @@ public class Data{
 		     } catch (Exception e) {
 		       e.printStackTrace();
 		     }
-		  
+
 	  
 	  		System.out.println("Parsing completed sucessfully, data available in Data.matrixCost.");
 		}
 
-	public static double[][] getMatrixCost() {
+	
+	public void displayMatrix()
+	{
+		for(int i = 0; i< Data.nbCity; i++)
+		{
+			for(int j = 0; j< Data.nbCity; j++)
+			{
+				System.out.println("matrix[ "+ i + " ][ " + j + " ] = " + this.matrixCost[i][j] );
+			}
+		}
+	}
+	public double[][] getMatrixCost() {
 		return matrixCost;
 	}
 
-	public static void setMatrixCost(double matrix_cost[][]) {
+	public void setMatrixCost(double matrix_cost[][]) {
 		matrixCost = matrix_cost;
 	}
 	

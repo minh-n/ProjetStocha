@@ -41,6 +41,7 @@ public class GUICitiesPanel extends JPanel {
 	public static void getData()
 	{
 		System.out.println("Getting data from class Data");
+		
 	}
 	
 }

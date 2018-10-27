@@ -29,7 +29,8 @@ import javax.swing.event.ListSelectionListener;
 public class GUI implements ActionListener{
 
 
-	public boolean verbose;
+	public boolean verbose = false;
+	public Data data;
 	
 	private GUICitiesPanel citiesPanel;
 	private static String currentFilename;
@@ -70,6 +71,8 @@ public class GUI implements ActionListener{
 		type = new JLabel();
 		vitesse = new JLabel();
 		altitude = new JLabel();
+		data = new Data();
+		
 	}
 
 	
@@ -445,8 +448,9 @@ public class GUI implements ActionListener{
             int returnVal = 0;
             System.out.println("######################################Program starting!!!!!!!!!!!!!################\n\n\n");
 			System.out.println("Starting computation...");
-			Data.readInputFile(currentFilename, verbose);
+			data.readInputFile(currentFilename, verbose);
 			
+			data.displayMatrix();
         } 
     }
 
