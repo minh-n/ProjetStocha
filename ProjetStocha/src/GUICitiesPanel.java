@@ -32,12 +32,12 @@ public class GUICitiesPanel extends JPanel {
 	{
 		
 	}
-	public GUICitiesPanel(Data data)
+	public GUICitiesPanel(DataTSP data)
 	{
 		
 	}
 
-	
+	//on get les donnees et on lance les calculs apres avoir obtenu les data
 	public static void getData()
 	{
 		System.out.println("Getting data from class Data");

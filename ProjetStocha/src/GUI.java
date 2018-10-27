@@ -25,12 +25,13 @@ import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class GUI implements ActionListener{
 
 
 	public boolean verbose = false;
-	public Data data;
+	public DataTSP data;
 	
 	private GUICitiesPanel citiesPanel;
 	private static String currentFilename;
@@ -42,9 +43,10 @@ public class GUI implements ActionListener{
 	private static JPanel menu;
 	private static JFileChooser fileChooser;
 	private static JButton openButton;
-	private static JCheckBox checkView;
-	private static JCheckBox checkAeroport;
-	private static JCheckBox checkTrajectoire;
+
+	//radiobuttons
+	private static JRadioButton buttonStocha;
+	private static JRadioButton buttonDeter;
 
 	private static JComboBox<String> CplexOrAnnealingCombo;
 	private static JComboBox<String> aeroCombo;
@@ -71,7 +73,7 @@ public class GUI implements ActionListener{
 		type = new JLabel();
 		vitesse = new JLabel();
 		altitude = new JLabel();
-		data = new Data();
+		data = new DataTSP();
 		
 	}
 
@@ -85,27 +87,46 @@ public class GUI implements ActionListener{
 		frame = new JFrame("TSP Solver");
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 	    frame.setPreferredSize(new Dimension(900, 750));
-	  
 
+
+	    
+	    
+        // ********************************************************
+	    // File chooser
+	    
         //Create the log first, because the action listeners
         //need to refer to it.
 	    JTextArea log = new JTextArea(5,20);
         log.setMargin(new Insets(5,5,5,5));
         log.setEditable(false);
         JScrollPane logScrollPane = new JScrollPane(log);
-
+		
         //Create a file chooser
         fileChooser = new JFileChooser();
         fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
         
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("XML", "xml");
+        fileChooser.setFileFilter(filter);
+
         openButton = new JButton("Open a File...");
         openButton.addActionListener(this);
-       
+     
         
+        
+        
+        
+        
+        // ********************************************************
+	    // City panel
+	    
 	    this.getCitiesPanel().setBackground(new java.awt.Color(50, 0, 50));
 		JLabel test = new JLabel("<html><font color='white'>this is the main jpanel for displaying the cities</font></html>");
 		this.getCitiesPanel().add(test);
 
+		
+		
+		
+		
 		// ********************************************************
 		// Checkboxes
 
@@ -121,31 +142,35 @@ public class GUI implements ActionListener{
 
         
         
+		// ********************************************************
+		// Stochastic or Deterministic radio buttons
         
-		// Vue 3D
-		checkView = new JCheckBox("Probleme Stocha");
-		checkView.setSelected(false);
-		checkOptions.add(checkView);
+		buttonStocha = new JRadioButton("Stochastic Problem");
+		buttonDeter = new JRadioButton("Deterministic Problem");
 
+		buttonStocha.addActionListener(this);
+		buttonDeter.addActionListener(this);
+		
+		ButtonGroup bgroup = new ButtonGroup();
+		
+		bgroup.add(buttonDeter);
+		bgroup.add(buttonStocha);
 
-		// Aeroport
-		checkAeroport = new JCheckBox("Pb deterministe");
-		checkAeroport.setSelected(false);
-		checkOptions.add(checkAeroport);
+		checkOptions.add(buttonStocha);
+		checkOptions.add(buttonDeter);	
+		
 
-
-		// Trajectoire
-		checkTrajectoire = new JCheckBox("Charger un fichier");
-		checkTrajectoire.setSelected(false);
-		checkOptions.add(checkTrajectoire);
-
-	
+		
+				
+		
+		
+		
 
 		// ********************************************************
-		// Limiter la vue
+		// Select between algorithms
 
 		JPanel comboOptions = new JPanel(new GridLayout(0, 1));
-		Border border2 = BorderFactory.createTitledBorder("Limiter la vue a:");
+		Border border2 = BorderFactory.createTitledBorder("Solve the problem with:");
 		comboOptions.setBorder(border2);
 
 		comboOptions.setBorder(new CompoundBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0), border2));
@@ -181,45 +206,33 @@ public class GUI implements ActionListener{
 		});
 
 		comboOptions.add(CplexOrAnnealingCombo);
-
-
-		// ****************************************************************
-		// Information sur un vol
-
-		JPanel infosVol = new JPanel(new GridLayout(0, 1));
-
-		Border border4 = BorderFactory.createTitledBorder("Informations ");
-
-		infosVol.setBorder(new CompoundBorder(border4, BorderFactory.createEmptyBorder(10, 10, 10, 10)));
-
-		infosVol.setBorder(border4);
-		// infosVol.setLayout(new BoxLayout(infosVol, BoxLayout.PAGE_AXIS));
-
-		idVol = new JLabel("Id Vol :");
-		infosVol.add(idVol);
-		depart = new JLabel("Depart : ");
-		infosVol.add(depart);
-		arrivee = new JLabel("Arrivee : ");
-		infosVol.add(arrivee);
-		type = new JLabel("Type : ");
-		infosVol.add(type);
-		vitesse = new JLabel("Vitesse : ");
-		infosVol.add(vitesse);
-		altitude = new JLabel("Altitude : ");
-		infosVol.add(altitude);		
-				
-		// ********************************************************
-
-		// SpeedTxt
-		JLabel texteVitesse = new JLabel("Vitesse x" + speedCount.toString());
-
-		// Boutons
-
-	
-		JPanel buttonVitesse = new JPanel();
-		buttonVitesse.setLayout(new BoxLayout(buttonVitesse, BoxLayout.X_AXIS));
-		buttonVitesse.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-		buttonVitesse.add(Box.createRigidArea(new Dimension(10, 0)));
+//
+//		// ****************************************************************
+//		// Information sur un vol
+//
+////		JPanel infosVol = new JPanel(new GridLayout(0, 1));
+////
+////		Border border4 = BorderFactory.createTitledBorder("Informations ");
+////
+////		infosVol.setBorder(new CompoundBorder(border4, BorderFactory.createEmptyBorder(10, 10, 10, 10)));
+////
+////		infosVol.setBorder(border4);
+//		// infosVol.setLayout(new BoxLayout(infosVol, BoxLayout.PAGE_AXIS));
+//
+//
+//				
+//		// ********************************************************
+//
+//		// SpeedTxt
+////		JLabel texteVitesse = new JLabel("Vitesse x" + speedCount.toString());
+////
+////		// Boutons
+////
+////	
+////		JPanel buttonVitesse = new JPanel();
+////		buttonVitesse.setLayout(new BoxLayout(buttonVitesse, BoxLayout.X_AXIS));
+////		buttonVitesse.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+////		buttonVitesse.add(Box.createRigidArea(new Dimension(10, 0)));
 
 		// ********************************************************
 		// Panel et menu generaux
@@ -234,9 +247,7 @@ public class GUI implements ActionListener{
 		menu.add(checkOptions);
 		menu.add(comboOptions);
 		menu.add(new JSeparator(JSeparator.HORIZONTAL));
-		menu.add(infosVol);
-		menu.add(buttonVitesse);
-		
+
 		
 		//Start button to start the computation
 		startButton = new JButton("Start the TSP");
@@ -260,34 +271,6 @@ public class GUI implements ActionListener{
 		frame.setVisible(true);
 	}
 
-//	
-//	public static void main(String[] args) {
-//		
-//		// create new JME appsettings
-//		//AppSettings settings = new AppSettings(true);
-//		//settings.setResolution(1080, 800);
-//		//settings.setSamples(8);
-//
-//		// canvasApplication = new ...
-//		//canvasApplication = new Panel3D();
-//		//canvasApplication.setPauseOnLostFocus(false);
-//
-//		// in the same way than in the "public static void main()" method from
-//		// SimpleApplication
-//		//settings.setFrameRate(60);
-//		//settings.setVSync(true);
-//
-//		// NB : this line is used instead of the app.start();
-//		//canvasApplication.createCanvas(); // create canvas!
-//
-//		//JmeCanvasContext ctx = (JmeCanvasContext) canvasApplication.getContext();
-//		//canvas = ctx.getCanvas();
-//		//Dimension dim = new Dimension(settings.getWidth(), settings.getHeight());
-//		//canvas.setPreferredSize(dim);
-//
-//		// Create the JFrame with the Canvas on the middle
-//		(static) createNewJFrame();
-//	}
 
 	public JPanel getCitiesPanel() {
 		return this.citiesPanel;
@@ -339,14 +322,6 @@ public class GUI implements ActionListener{
 		GUI.intervalle = intervalle;
 	}
 
-	public JCheckBox getCheckTrajectoire() {
-		return checkTrajectoire;
-	}
-
-	public JCheckBox getCheckView() {
-		return checkView;
-	}
-
 
 	public static JFileChooser getFileChooser() {
 		return fileChooser;
@@ -365,7 +340,6 @@ public class GUI implements ActionListener{
 
             if (returnVal == JFileChooser.APPROVE_OPTION) {
                 File file = fileChooser.getSelectedFile();
-                //This is where a real application would open the file.
                 System.out.println("Filename : " + file.getName());
 				
 				if(file.getName().contains(".xml"))
@@ -379,13 +353,36 @@ public class GUI implements ActionListener{
         //Handle start of calculations
         
         if (e.getSource() == startButton) {
-            int returnVal = 0;
+            
+        	if (currentFilename != null)
+        	{
             System.out.println("######################################Program starting!!!!!!!!!!!!!################\n\n\n");
 			System.out.println("Starting computation...");
 			data.readInputFile(currentFilename, verbose);
 			
 			data.displayMatrix();
+        	}
+        	else
+        	{
+        		System.out.println("No file selected!");
+        	}
         } 
+        
+	
+ 
+        if (e.getSource() == buttonStocha) {
+ 
+			System.out.println("Solving mode: STOCHASTIC");
+			//TODO : put this information into a boolean
+ 
+        } else if (e.getSource() == buttonDeter) {
+ 
+			System.out.println("Solving mode: DETERMINISTIC");
+			//TODO : put this information into a boolean
+
+        }
+
+    
     }
 
 

@@ -5,7 +5,7 @@ public abstract class LinearProblem
 {
 	//----------ATTRIBUTES-------------------
 	
-	protected Data data;
+	protected DataTSP data;
 	//max is true
 	protected boolean maxMin;
 	//TODO trouver un type qui a du sens
@@ -13,7 +13,7 @@ public abstract class LinearProblem
 	
 	//----------CONST GET SET------------------
 	
-	public LinearProblem(Data data)
+	public LinearProblem(DataTSP data)
 	{
 		this.data = data;
 		//TODO stuff

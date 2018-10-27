@@ -7,7 +7,7 @@ public class TSPDeterministic extends LinearProblem{
 	private ArrayList<ArrayList<Boolean>> tempSolution;
 	
 	
-	public TSPDeterministic(Data data)
+	public TSPDeterministic(DataTSP data)
 	{
 		super(data);
 		//TODO stuff

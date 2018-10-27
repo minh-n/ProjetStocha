@@ -14,7 +14,6 @@ public class Manager {
 		GUI gui = new GUI(citiesPanel);
 		gui.createNewJFrame();
 
-		//on get les donnees et on lance les calculs apres avoir obtenu les data
 		
 		
 

@@ -11,7 +11,7 @@ public class TSPStochastic extends LinearProblem{
 	private ArrayList<ArrayList<Float>> varianceCovariance;
 	
 	
-	public TSPStochastic(Data data)
+	public TSPStochastic(DataTSP data)
 	{
 		super(data);
 		//TODO stuff
