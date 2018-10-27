@@ -65,13 +65,23 @@ public class Data{
 					double currentEdgeAttribute = Double.parseDouble(attributes.getValue(0));
 					if (i != j)
 					{
+						System.out.println("i, j, current = " + i + ", " + j + "; " + currentEdgeAttribute);
 						matrixCost[i][j] = currentEdgeAttribute;
 					}
 					else
 					{
-						matrixCost[i][j] = -1;
-						matrixCost[i][j+1] = currentEdgeAttribute;
-						j++;
+						if(currentEdgeAttribute == 9999.0) //the case of br17.xml, where a city is linked to itself with a weight of 9999 in the XML file
+						{
+							matrixCost[i][j] = -1;
+						}
+						else
+						{
+							if(verbose)System.out.println("Debug: A city is linked to itself with a weight of -1.");
+							matrixCost[i][j] = -1;
+							matrixCost[i][j+1] = currentEdgeAttribute;
+							j++;
+						}
+
 					}
 					
 					if(verbose)System.out.println("Filling matrix[ "+ i + " ][ " + j + " ] = " + matrixCost[i][j] );
@@ -130,10 +140,7 @@ public class Data{
 
 				if (isEdgeElement) {			
 					//System.out.println("Edge number corresponding : " + Integer.valueOf(new String(ch, start, length)));					
-					
 					j++;
-					
-
 					isEdgeElement = false;
 				}
 
@@ -160,6 +167,7 @@ public class Data{
 			{
 				System.out.println("matrix[ "+ i + " ][ " + j + " ] = " + this.matrixCost[i][j] );
 			}
+			System.out.println("");
 		}
 	}
 	public double[][] getMatrixCost() {
