@@ -19,7 +19,7 @@ public class TSPStochastic extends LinearProblem{
 	
 	public float objective_function()
 	{
-		//TODO calculer un coût à partir de sol
+		//TODO calculer un co a partir de sol
 		float cost = 666;
 		
 		return cost;
