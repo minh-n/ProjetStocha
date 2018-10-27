@@ -20,7 +20,7 @@ public class SimulatedAnnealingTSPD extends SimulatedAnnealing
 		this.initialTemperature = 50;
 	}
 	
-	public void generate_neighbor()
+	public void generateNeighbor()
 	{
 		//TODO stuff : get the tempSol from the problem, and use K-opt to generate a new sol
 		ArrayList<ArrayList<Boolean>> sol = new ArrayList<ArrayList<Boolean>>();

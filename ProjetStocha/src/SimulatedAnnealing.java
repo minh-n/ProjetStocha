@@ -11,7 +11,7 @@ public abstract class SimulatedAnnealing
 	protected float AcceptationRate;
 	protected int nbPalierMax;
 	protected int currentPalier;
-	//il y aura ptetre des current à virer
+	//il y aura ptetre des current a virer
 
 	
 	
@@ -46,6 +46,6 @@ public abstract class SimulatedAnnealing
 		this.currentTemperature /= 2;
 	}
 	
-	public abstract void generate_neighbor();
+	public abstract void generateNeighbor();
 	
 }
