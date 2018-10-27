@@ -5,12 +5,6 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.ArrayList;
 
 
 public class Data{
@@ -23,14 +17,7 @@ public class Data{
 	{
 	}
 
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
-		System.out.println("Starting the parser main...");
-		read_input_file("./XMLData/att48.xml");
-	}
-
-	public static void read_input_file(String filename)
+	public static void readInputFile(String filename, boolean verbose)
 	{
 
 	  try {
@@ -73,7 +60,8 @@ public class Data{
 					isEdgeElement = true;
 					double currentEdgeAttribute = Double.parseDouble(attributes.getValue(0));
 					matrixCost[i][j] = currentEdgeAttribute;
-					System.out.println("Filling matrix[ "+ i + " ][ " + j + " ] = " + currentEdgeAttribute );
+					
+					if(verbose)System.out.println("Filling matrix[ "+ i + " ][ " + j + " ] = " + currentEdgeAttribute );
 					
 				}
 
@@ -113,7 +101,7 @@ public class Data{
 					//System.out.println("isVertex? : " + new String(ch, start, length));
 					isVertexElement = false;
 					i++;
-					System.out.println("\nCurrently parsing graph values for city number " + i + ".");
+					if(verbose)System.out.println("\nCurrently parsing graph values for city number " + i + ".");
 				}
 
 				if (isEdgeElement) {			
@@ -132,14 +120,16 @@ public class Data{
 		       e.printStackTrace();
 		     }
 		  
+	  
+	  		System.out.println("Parsing completed sucessfully, data available in Data.matrixCost.");
 		}
 
-	public double[][] getMatrixCost() {
+	public static double[][] getMatrixCost() {
 		return matrixCost;
 	}
 
-	public void setMatrixCost(double matrix_cost[][]) {
-		this.matrixCost = matrix_cost;
+	public static void setMatrixCost(double matrix_cost[][]) {
+		matrixCost = matrix_cost;
 	}
 	
 
