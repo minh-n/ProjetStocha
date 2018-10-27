@@ -11,16 +11,21 @@ public class Data{
 
 	private static int nbCity;
 	private double matrixCost[][];
+	private static String filename;
+	private static boolean verbose;
 	
 	public Data()
 	{
 	}
 
-	public void readInputFile(String filename, boolean verbose)
+	public void readInputFile(String file, boolean verb)
 	{
 
 	  try {
 
+		  	filename = file;
+		  	verbose = verb;
+		  	
 			SAXParserFactory factory = SAXParserFactory.newInstance();
 			SAXParser saxParser = factory.newSAXParser();
 
