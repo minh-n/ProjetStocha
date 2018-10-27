@@ -46,7 +46,7 @@ public class GUI implements ActionListener{
 	private static JCheckBox checkAeroport;
 	private static JCheckBox checkTrajectoire;
 
-	private static JComboBox<String> paysCombo;
+	private static JComboBox<String> CplexOrAnnealingCombo;
 	private static JComboBox<String> aeroCombo;
 
 	private static JList<String> listVol;
@@ -150,103 +150,38 @@ public class GUI implements ActionListener{
 
 		comboOptions.setBorder(new CompoundBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0), border2));
 
-		// Pays
-		ArrayList<String> listPays = new ArrayList<String>(
-				Arrays.asList("Pratap", "Peter", "Harsh"));;
-		Collections.sort(listPays);
-		listPays.add(0, "Tous les pays");
-
-		DefaultComboBoxModel<String> modelBoxPays = new DefaultComboBoxModel<String>();
-
-		for (String str : listPays) {
-			modelBoxPays.addElement(str);
+		// CPLEX OU ANNEALING
+		ArrayList<String> listCplexOrAnnealing = new ArrayList<String>();
+		Collections.sort(listCplexOrAnnealing);
+		listCplexOrAnnealing.add(0, "Simulated Annealing");
+		listCplexOrAnnealing.add(0, "CPLEX");
+		DefaultComboBoxModel<String> modelBoxCplexOrAnnealing = new DefaultComboBoxModel<String>();
+		for (String str : listCplexOrAnnealing) {
+			modelBoxCplexOrAnnealing.addElement(str);
 		}
-
-		paysCombo = new JComboBox<String>(modelBoxPays);
-		paysCombo.setEditable(true);
-
-		paysCombo.getEditor().getEditorComponent().addKeyListener(new KeyAdapter() {
+		
+		CplexOrAnnealingCombo = new JComboBox<String>(modelBoxCplexOrAnnealing);
+		CplexOrAnnealingCombo.setEditable(true);
+		CplexOrAnnealingCombo.getEditor().getEditorComponent().addKeyListener(new KeyAdapter() {
 			public void keyReleased(KeyEvent e) {
-				String newText = (String) paysCombo.getEditor().getItem();
+				String newText = (String) CplexOrAnnealingCombo.getEditor().getItem();
 
 				DefaultComboBoxModel<String> newModel = new DefaultComboBoxModel<String>();
 
-				for (String name : listPays) {
+				for (String name : listCplexOrAnnealing) {
 					if (name.contains("" + newText)) {
 						newModel.addElement(name);
 					}
 				}
 
-				paysCombo.setModel(newModel);
-				paysCombo.getEditor().setItem(newText);
-				paysCombo.setPopupVisible(true);
+				CplexOrAnnealingCombo.setModel(newModel);
+				CplexOrAnnealingCombo.getEditor().setItem(newText);
+				CplexOrAnnealingCombo.setPopupVisible(true);
 			}
 		});
 
-		// Aeroport
-		ArrayList<String> listAeroport = new ArrayList<String>(
-				Arrays.asList("aero1", "effdsPeter", "fggggggggggHarsh", "fnggfsd"));;
-	
-		
-		Collections.sort(listAeroport);
-		listAeroport.add(0, "Tous les aeroports");
+		comboOptions.add(CplexOrAnnealingCombo);
 
-		DefaultComboBoxModel<String> modelBoxAeroport = new DefaultComboBoxModel<String>();
-
-		for (String str : listAeroport) {
-			modelBoxAeroport.addElement(str);
-		}
-
-		aeroCombo = new JComboBox<String>(modelBoxAeroport);
-		aeroCombo.setEditable(true);
-
-		aeroCombo.getEditor().getEditorComponent().addKeyListener(new KeyAdapter() {
-			public void keyReleased(KeyEvent e) {
-				String newText = (String) aeroCombo.getEditor().getItem();
-
-				DefaultComboBoxModel<String> newModel = new DefaultComboBoxModel<String>();
-
-				for (String str : listAeroport) {
-					if (str.contains("" + newText)) {
-						newModel.addElement(str);
-					}
-				}
-
-				aeroCombo.setModel(newModel);
-				aeroCombo.getEditor().setItem(newText);
-				aeroCombo.setPopupVisible(true);
-			}
-		});
-
-		comboOptions.add(paysCombo);
-		comboOptions.add(aeroCombo);
-
-		// ********************************************************
-		// Liste des vols
-
-		JPanel listeVols = new JPanel(new BorderLayout());
-		Border border3 = BorderFactory.createTitledBorder("Liste des vols ");
-		listeVols.setBorder(border3);
-		listeVols.setBorder(new CompoundBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0), border3));
-		listeVols.setPreferredSize(new Dimension(70, 30));
-
-		Collections.sort(listAeroport);
-
-		DefaultListModel<String> listModel = new DefaultListModel<String>();
-
-		for (String str : listAeroport) {
-			listModel.addElement(str);
-		}
-
-		listVol = new JList<String>(listModel);
-
-		listVol.setVisibleRowCount(1);
-		listVol.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		listVol.setSelectedIndex(0);
-		listVol.setVisibleRowCount(5);
-		JScrollPane listScrollPane = new JScrollPane(listVol);
-
-		listeVols.add(listScrollPane, BorderLayout.CENTER);
 
 		// ****************************************************************
 		// Information sur un vol
@@ -299,7 +234,6 @@ public class GUI implements ActionListener{
 		menu.add(checkOptions);
 		menu.add(comboOptions);
 		menu.add(new JSeparator(JSeparator.HORIZONTAL));
-		menu.add(listeVols);
 		menu.add(infosVol);
 		menu.add(buttonVitesse);
 		
