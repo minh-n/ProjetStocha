@@ -151,7 +151,7 @@ public class GUI implements ActionListener{
 		comboOptions.setBorder(new CompoundBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0), border2));
 
 		// CPLEX OU ANNEALING
-		ArrayList<String> listCplexOrAnnealing = new ArrayList<String>();
+		final ArrayList<String> listCplexOrAnnealing = new ArrayList<String>();
 		Collections.sort(listCplexOrAnnealing);
 		listCplexOrAnnealing.add(0, "Simulated Annealing");
 		listCplexOrAnnealing.add(0, "CPLEX");
