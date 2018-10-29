@@ -56,15 +56,27 @@ public class GUICitiesPanel extends JPanel implements MouseMotionListener, Compo
 		this.matrixCost = new Matrix(data.getMatrixCost());
 		this.nbCity = data.getNbCity();
 
-		// System.out.println("\nGUICitiesPanel: Displaying the cost matrix below: ");
+		//System.out.println("\nGUICitiesPanel: Displaying the cost matrix below: ");
+		//this.matrixCost.print(4, 1);
 
 		// Matrix.print(nb of space for each column, number of digits after the .)
-		// this.matrixCost.print(4, 1);
 
 		System.out.println("\nGUICitiesPanel: Calculating cities position based on the cost matrix: ");
 
 		this.getPositionsFromCost(true);
 
+	}
+	
+	public void paintPath(Graphics2D g) {
+		
+		g.setColor(Color.BLACK); 
+		
+		for (int i=0; i< this.nbCity -1 ; ++i)
+		{
+			//g.drawLine();
+					
+		}
+		
 	}
 
 	public void setCitiesPositionForDisplay() {
@@ -79,7 +91,8 @@ public class GUICitiesPanel extends JPanel implements MouseMotionListener, Compo
 		// Iterating through list of cities, changing their position according to screen size
 		//windowSize.x and y is the position of the window
 		for (City c : citiesPosition) {
-			citiesPositionForDisplay.add(new City(((c.getX() - windowSize.x) * sideCoef), ((c.getY() - windowSize.y) * sideCoef), id));
+			citiesPositionForDisplay.add(new City(((c.getX() - windowSize.x) 
+					* sideCoef), ((c.getY() - windowSize.y) * sideCoef), id));
 			id++;
 		}
 	}
@@ -162,9 +175,9 @@ public class GUICitiesPanel extends JPanel implements MouseMotionListener, Compo
 				+ ", " + M.getRowDimension() + ").\n");
 		for (int i = 0; i < nbCity; i++) {
 			for (int j = 0; j < nbCity; j++) {
-				double T = (Math.pow(matrixCost.get(0, j), 2) + Math.pow(matrixCost.get(i, 0), 2)
-						- Math.pow(matrixCost.get(i, j), 2)) / 2;
-				M.set(i, j, T);
+				M.set(i, j, (Math.pow(matrixCost.get(0, j), 2) 
+						+ Math.pow(matrixCost.get(i, 0), 2)
+						- Math.pow(matrixCost.get(i, j), 2)) / 2);
 			}
 		}
 
@@ -185,9 +198,7 @@ public class GUICitiesPanel extends JPanel implements MouseMotionListener, Compo
 		// filling the cities position
 		for (int i = 0; i < X.getColumnDimension(); i++) {
 			for (int j = X.getRowDimension() - 2; j < X.getRowDimension(); j = j + 2) {
-				double a = X.get(i, j);
-				double b = X.get(i, j + 1);
-				City city = new City(a, b, id);
+				City city = new City(X.get(i, j), X.get(i, j + 1), id);
 				citiesPosition.add(city);
 				id++;
 			}
