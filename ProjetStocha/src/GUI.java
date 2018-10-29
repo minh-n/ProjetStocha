@@ -70,7 +70,7 @@ public class GUI implements ActionListener{
 		//Main window frame, panel and menu
 		frame = new JFrame("TSP Solver");
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-	    frame.setPreferredSize(new Dimension(1032, 755));
+	    frame.setPreferredSize(new Dimension(980, 755));
 	    panel = new JPanel(new BorderLayout());
 		menu = new JPanel();
 		menu.setPreferredSize(new Dimension(300, 100));
