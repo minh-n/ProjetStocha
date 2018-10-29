@@ -23,7 +23,7 @@ public class City {
 		return xCoord;
 	}
 
-	public void setX(int xCoord) {
+	public void setX(double xCoord) {
 		this.xCoord = xCoord;
 	}
 
@@ -31,7 +31,7 @@ public class City {
 		return yCoord;
 	}
 
-	public void setY(int yCoord) {
+	public void setY(double yCoord) {
 		this.yCoord = yCoord;
 	}
 

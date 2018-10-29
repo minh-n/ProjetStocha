@@ -3,17 +3,13 @@
 //import com.jme3.system.JmeCanvasContext;
 
 import java.awt.BorderLayout;
-import java.awt.Canvas;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.concurrent.Callable;
 
 import javax.swing.*;
 
@@ -23,8 +19,6 @@ import java.awt.event.*;
 
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class GUI implements ActionListener{
@@ -35,7 +29,9 @@ public class GUI implements ActionListener{
 	public DataTSP data;	
 	//ce Panneau citiesPanel permettrait d'afficher les villes, il calculerait les coordonnees etc
 	private GUICitiesPanel citiesPanel;
-	
+
+	private static JFileChooser fileChooser;
+	private static JButton openButton;
 	private static String currentFilename;
 	private static JLabel whatFile;
 	private static JButton startButton;
@@ -43,38 +39,16 @@ public class GUI implements ActionListener{
 	private static JFrame frame;
 	private static JPanel panel;
 	private static JPanel menu;
-	private static JFileChooser fileChooser;
-	private static JButton openButton;
-
+	
 	//radiobuttons
 	private static JRadioButton buttonStocha;
 	private static JRadioButton buttonDeter;
 
 	private static JComboBox<String> CplexOrAnnealingCombo;
-	private static JComboBox<String> aeroCombo;
-
-	private static JList<String> listVol;
-
-	private static JLabel idVol;
-	private static JLabel depart;
-	private static JLabel arrivee;
-	private static JLabel type;
-	private static JLabel vitesse;
-	private static JLabel altitude;
  
-	private static int intervalle = 6000;
-	private static Integer speedCount = 1;
-
-	//private static LectureFichier data = new LectureFichier();
-
 	public GUI() {
 		citiesPanel =  new GUICitiesPanel();
-		idVol = new JLabel();
-		depart = new JLabel();
-		arrivee = new JLabel();
-		type = new JLabel();
-		vitesse = new JLabel();
-		altitude = new JLabel();
+
 		data = new DataTSP();
 		
 	}
@@ -85,19 +59,21 @@ public class GUI implements ActionListener{
 	
 	public void createNewJFrame() {
 
+		System.out.println("\n---WARNING: GUI standing by.");
+
 		//Main window frame
 		frame = new JFrame("TSP Solver");
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-	    frame.setPreferredSize(new Dimension(900, 750));
+	    frame.setPreferredSize(new Dimension(1032, 755));
 
 
         
         // ********************************************************
 	    // City panel
 	    
-	    this.getCitiesPanel().setBackground(new java.awt.Color(50, 0, 50));
-		JLabel test = new JLabel("<html><font color='white'>this is the main jpanel for displaying the cities</font></html>");
-		this.getCitiesPanel().add(test);
+	    this.getCitiesPanel().setBackground(Color.LIGHT_GRAY);
+		//JLabel test = new JLabel("<html><font color='white'>this is the main jpanel for displaying the cities</font></html>");
+		//this.getCitiesPanel().add(test);
 
 		
 		
@@ -109,7 +85,7 @@ public class GUI implements ActionListener{
 	    JTextArea log = new JTextArea(5,20);
         log.setMargin(new Insets(5,5,5,5));
         log.setEditable(false);
-        JScrollPane logScrollPane = new JScrollPane(log);
+        //JScrollPane logScrollPane = new JScrollPane(log);
 		
         //Create a file chooser
         fileChooser = new JFileChooser();
@@ -215,7 +191,6 @@ public class GUI implements ActionListener{
 		menu.add(checkOptions);
 		menu.add(comboOptions);
 		menu.add(new JSeparator(JSeparator.HORIZONTAL));
-
 		
 		//Start button to start the computation
 		startButton = new JButton("Start the TSP");
@@ -231,73 +206,13 @@ public class GUI implements ActionListener{
 		//panel.add(canvas, BorderLayout.CENTER);
 		panel.add(menu, BorderLayout.WEST);
 		
+		//set cities panel (right panel where cities are visible)
 		panel.add(this.getCitiesPanel(), BorderLayout.CENTER);
 
 		frame.add(panel);
 		frame.pack();
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
-	}
-
-
-	public JPanel getCitiesPanel() {
-		return this.citiesPanel;
-	}
-
-	public void setCitiesPanel(GUICitiesPanel citiesPanel) {
-		this.citiesPanel = citiesPanel;
-	}
-	
-
-	public JLabel getIdVol() {
-		return idVol;
-	}
-	
-	public JList<String> getListVol()
-	{
-		return listVol;
-	}
-
-	public void setidVol(String str) {
-		idVol.setText(("Id Vol : ") + str);
-	}
-
-	public void setDepart(String str) {
-		depart.setText(("Depart : ") + str);
-	}
-
-	public void setArrivee(String str) {
-		arrivee.setText(("Arrivee : ") + str);
-	}
-
-	public void setType(String str) {
-		type.setText(("Type : ") + str);
-	}
-
-	public void setVitesse(String str) {
-		vitesse.setText(("Vitesse : ") + str);
-	}
-
-	public void setAltitude(String str) {
-		altitude.setText(("Altitude : ") + str);
-	}
-
-	public static int getIntervalle() {
-		return intervalle;
-	}
-
-	public static void setIntervalle(int intervalle) {
-		GUI.intervalle = intervalle;
-	}
-
-
-	public static JFileChooser getFileChooser() {
-		return fileChooser;
-	}
-
-
-	public static void setFileChooser(JFileChooser fileChooser) {
-		GUI.fileChooser = fileChooser;
 	}
 
     public void actionPerformed(ActionEvent e) {
@@ -365,6 +280,22 @@ public class GUI implements ActionListener{
 		GUI.currentFilename = currentFilename;
 	}
 
+	public JPanel getCitiesPanel() {
+		return this.citiesPanel;
+	}
 
+	public void setCitiesPanel(GUICitiesPanel citiesPanel) {
+		this.citiesPanel = citiesPanel;
+	}
+	
+
+	public static JFileChooser getFileChooser() {
+		return fileChooser;
+	}
+
+
+	public static void setFileChooser(JFileChooser fileChooser) {
+		GUI.fileChooser = fileChooser;
+	}
 
 }
