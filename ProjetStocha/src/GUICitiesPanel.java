@@ -70,15 +70,16 @@ public class GUICitiesPanel extends JPanel implements MouseMotionListener, Compo
 	public void setCitiesPositionForDisplay() {
 		citiesPositionForDisplay.clear();
 
-		double maxSize = (getWidth() > getHeight()) ? getHeight() : getWidth();
-
+		//getting the max panel size
+		double maxSize = (this.getWidth() > this.getHeight()) ? this.getHeight() : this.getWidth();
+		//computing the coefficient between maxsize and 
 		double sideCoef = maxSize / ((windowSize.height + windowSize.width)/2);
 
 		int id = 0;
 		// Iterating through list of cities, changing their position according to screen size
+		//windowSize.x and y is the position of the window
 		for (City c : citiesPosition) {
-			citiesPositionForDisplay
-					.add(new City(((c.getX() - windowSize.x) * sideCoef), ((c.getY() - windowSize.y) * sideCoef), id));
+			citiesPositionForDisplay.add(new City(((c.getX() - windowSize.x) * sideCoef), ((c.getY() - windowSize.y) * sideCoef), id));
 			id++;
 		}
 	}
