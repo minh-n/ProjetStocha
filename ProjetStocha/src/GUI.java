@@ -31,9 +31,11 @@ public class GUI implements ActionListener{
 
 
 	public boolean verbose = false;
-	public DataTSP data;
 	
+	public DataTSP data;	
+	//ce Panneau citiesPanel permettrait d'afficher les villes, il calculerait les coordonnees etc
 	private GUICitiesPanel citiesPanel;
+	
 	private static String currentFilename;
 	private static JLabel whatFile;
 	private static JButton startButton;
@@ -65,8 +67,8 @@ public class GUI implements ActionListener{
 
 	//private static LectureFichier data = new LectureFichier();
 
-	public GUI(GUICitiesPanel citiesPanel) {
-		this.setCitiesPanel(citiesPanel);
+	public GUI() {
+		citiesPanel =  new GUICitiesPanel();
 		idVol = new JLabel();
 		depart = new JLabel();
 		arrivee = new JLabel();
@@ -89,8 +91,16 @@ public class GUI implements ActionListener{
 	    frame.setPreferredSize(new Dimension(900, 750));
 
 
+        
+        // ********************************************************
+	    // City panel
 	    
-	    
+	    this.getCitiesPanel().setBackground(new java.awt.Color(50, 0, 50));
+		JLabel test = new JLabel("<html><font color='white'>this is the main jpanel for displaying the cities</font></html>");
+		this.getCitiesPanel().add(test);
+
+		
+		
         // ********************************************************
 	    // File chooser
 	    
@@ -104,47 +114,33 @@ public class GUI implements ActionListener{
         //Create a file chooser
         fileChooser = new JFileChooser();
         fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-        
+
         FileNameExtensionFilter filter = new FileNameExtensionFilter("XML", "xml");
         fileChooser.setFileFilter(filter);
 
-        openButton = new JButton("Open a File...");
+        openButton = new JButton("Open a file...");
+        openButton.setMaximumSize(openButton.getPreferredSize() );
+
         openButton.addActionListener(this);
      
-        
-        
-        
-        
-        
-        // ********************************************************
-	    // City panel
-	    
-	    this.getCitiesPanel().setBackground(new java.awt.Color(50, 0, 50));
-		JLabel test = new JLabel("<html><font color='white'>this is the main jpanel for displaying the cities</font></html>");
-		this.getCitiesPanel().add(test);
-
-		
-		
-		
-		
-		// ********************************************************
-		// Checkboxes
-
-		JPanel checkOptions = new JPanel(new GridLayout(0, 1));
-		Border border = BorderFactory.createTitledBorder("File selection");
-		checkOptions.setBorder(new CompoundBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0), border));
-
+		JPanel fcBox = new JPanel(new GridLayout(0, 1));
+		Border border0 = BorderFactory.createTitledBorder("File selection");
+		fcBox.setBorder(new CompoundBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0), border0));
 		whatFile = new JLabel("The selected file is " + currentFilename);
-		
+			
 		//openbutton
-        checkOptions.add(openButton);
-        checkOptions.add(whatFile);
+		fcBox.add(openButton);
+		fcBox.add(whatFile);
 
-        
         
 		// ********************************************************
 		// Stochastic or Deterministic radio buttons
-        
+
+		JPanel checkOptions = new JPanel(new GridLayout(0, 1));
+		Border border = BorderFactory.createTitledBorder("Type of problem");
+		checkOptions.setBorder(new CompoundBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0), border));
+
+
 		buttonStocha = new JRadioButton("Stochastic Problem");
 		buttonDeter = new JRadioButton("Deterministic Problem");
 
@@ -159,11 +155,6 @@ public class GUI implements ActionListener{
 		checkOptions.add(buttonStocha);
 		checkOptions.add(buttonDeter);	
 		
-
-		
-				
-		
-		
 		
 
 		// ********************************************************
@@ -173,7 +164,7 @@ public class GUI implements ActionListener{
 		Border border2 = BorderFactory.createTitledBorder("Solve the problem with:");
 		comboOptions.setBorder(border2);
 
-		comboOptions.setBorder(new CompoundBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0), border2));
+		comboOptions.setBorder(new CompoundBorder(BorderFactory.createEmptyBorder(10, 0, 5, 0), border2));
 
 		// CPLEX OU ANNEALING
 		final ArrayList<String> listCplexOrAnnealing = new ArrayList<String>();
@@ -186,6 +177,7 @@ public class GUI implements ActionListener{
 		}
 		
 		CplexOrAnnealingCombo = new JComboBox<String>(modelBoxCplexOrAnnealing);
+		CplexOrAnnealingCombo.setMaximumSize(CplexOrAnnealingCombo.getPreferredSize() );
 		CplexOrAnnealingCombo.setEditable(true);
 		CplexOrAnnealingCombo.getEditor().getEditorComponent().addKeyListener(new KeyAdapter() {
 			public void keyReleased(KeyEvent e) {
@@ -204,36 +196,11 @@ public class GUI implements ActionListener{
 				CplexOrAnnealingCombo.setPopupVisible(true);
 			}
 		});
-
-		comboOptions.add(CplexOrAnnealingCombo);
-//
-//		// ****************************************************************
-//		// Information sur un vol
-//
-////		JPanel infosVol = new JPanel(new GridLayout(0, 1));
-////
-////		Border border4 = BorderFactory.createTitledBorder("Informations ");
-////
-////		infosVol.setBorder(new CompoundBorder(border4, BorderFactory.createEmptyBorder(10, 10, 10, 10)));
-////
-////		infosVol.setBorder(border4);
-//		// infosVol.setLayout(new BoxLayout(infosVol, BoxLayout.PAGE_AXIS));
-//
-//
-//				
-//		// ********************************************************
-//
-//		// SpeedTxt
-////		JLabel texteVitesse = new JLabel("Vitesse x" + speedCount.toString());
-////
-////		// Boutons
-////
-////	
-////		JPanel buttonVitesse = new JPanel();
-////		buttonVitesse.setLayout(new BoxLayout(buttonVitesse, BoxLayout.X_AXIS));
-////		buttonVitesse.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-////		buttonVitesse.add(Box.createRigidArea(new Dimension(10, 0)));
-
+		
+		JPanel wrapper = new JPanel();
+		wrapper.add( CplexOrAnnealingCombo );
+		comboOptions.add( wrapper );
+		
 		// ********************************************************
 		// Panel et menu generaux
 
@@ -244,6 +211,7 @@ public class GUI implements ActionListener{
 		menu.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
 		menu.setLayout(new BoxLayout(menu, BoxLayout.Y_AXIS));
 
+		menu.add(fcBox);
 		menu.add(checkOptions);
 		menu.add(comboOptions);
 		menu.add(new JSeparator(JSeparator.HORIZONTAL));
@@ -340,7 +308,7 @@ public class GUI implements ActionListener{
 
             if (returnVal == JFileChooser.APPROVE_OPTION) {
                 File file = fileChooser.getSelectedFile();
-                System.out.println("Filename : " + file.getName());
+                System.out.println("GUI: Filename : " + file.getName());
 				
 				if(file.getName().contains(".xml"))
 				{
@@ -356,15 +324,17 @@ public class GUI implements ActionListener{
             
         	if (currentFilename != null)
         	{
-            System.out.println("######################################Program starting!!!!!!!!!!!!!################\n\n\n");
-			System.out.println("Starting computation...");
+            System.out.println("\nGUI: Starting computation!! Please wait...");
 			data.readInputFile(currentFilename, verbose);
 			
-			data.displayMatrix();
+			//data.displayMatrix();
+			//creating the panel in which the cities will be displayed
+			citiesPanel.getData(data);
+
         	}
         	else
         	{
-        		System.out.println("No file selected!");
+        		System.out.println("GUI: No file selected!");
         	}
         } 
         
@@ -372,12 +342,12 @@ public class GUI implements ActionListener{
  
         if (e.getSource() == buttonStocha) {
  
-			System.out.println("Solving mode: STOCHASTIC");
+			System.out.println("GUI: Solving mode: STOCHASTIC");
 			//TODO : put this information into a boolean
  
         } else if (e.getSource() == buttonDeter) {
  
-			System.out.println("Solving mode: DETERMINISTIC");
+			System.out.println("GUI: Solving mode: DETERMINISTIC");
 			//TODO : put this information into a boolean
 
         }

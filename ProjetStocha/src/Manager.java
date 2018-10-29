@@ -8,15 +8,9 @@ public class Manager {
 
 		System.out.println("Hello world");
 		
-		//ce Panneau citiesPanel permettrait d'afficher les villes, il calculerait les coordonnees etc
-	    GUICitiesPanel citiesPanel =  new GUICitiesPanel();
 		
-		GUI gui = new GUI(citiesPanel);
+		GUI gui = new GUI();
 		gui.createNewJFrame();
-
-		
-		
-
 	}
 	
 	

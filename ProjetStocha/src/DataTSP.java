@@ -44,7 +44,7 @@ public class DataTSP extends Data{
 		                Attributes attributes) throws SAXException {
 
 				if (qName.equalsIgnoreCase("travellingSalesmanProblemInstance")) {
-					System.out.println("This is a TSP XML dataset! Commencing parsing operations...");
+					System.out.println("\nDataTSP: This is a TSP XML dataset! Commencing parsing operations...");
 				}
 
 				if (qName.equalsIgnoreCase("description")) {
@@ -64,7 +64,7 @@ public class DataTSP extends Data{
 					double currentEdgeAttribute = Double.parseDouble(attributes.getValue(0));
 					if (i != j)
 					{
-						System.out.println("i, j, current = " + i + ", " + j + "; " + currentEdgeAttribute);
+						//System.out.println("i, j, current = " + i + ", " + j + "; " + currentEdgeAttribute);
 						matrixCost[i][j] = currentEdgeAttribute;
 					}
 					else
@@ -83,7 +83,7 @@ public class DataTSP extends Data{
 
 					}
 					
-					if(verbose)System.out.println("Filling matrix[ "+ i + " ][ " + j + " ] = " + matrixCost[i][j] );
+					//if(verbose)System.out.println("DataTSP: Filling matrix[ "+ i + " ][ " + j + " ] = " + matrixCost[i][j] );
 					//System.out.println("j = " + j);
 				}
 
@@ -107,15 +107,15 @@ public class DataTSP extends Data{
 					numberString = numberString.replaceAll("\\D+",""); //replacing letters with ""
 					if(numberString.equals(""))
 					{
-						System.out.println("####DEBUG NB VILLE INCONNU");
+						System.out.println("####DataTSP: DEBUG Number of cities unknown! Now attempting to retrieve it in another way.");
 						DataTSP.nbCity = Integer.parseInt(filename.replaceAll("\\D+",""));
 					}
 					else
 					{
-						System.out.println("Nombre ville " + numberString);
+						System.out.println("Debug: number city from description : " + numberString);
 						DataTSP.nbCity = Integer.parseInt(numberString);
 					}
-					System.out.println("Number of city in this dataset = " + nbCity);
+					System.out.println("DataTSP: Number of city in this dataset = " + nbCity + ".");
 					
 					matrixCost = new double[nbCity][nbCity];
 					//last value is -1
@@ -150,7 +150,7 @@ public class DataTSP extends Data{
 		     } catch (Exception e) {
 		       e.printStackTrace();
 		     }
-	  		System.out.println("Parsing completed sucessfully, data available in Data.matrixCost.");
+	  		System.out.println("DataTSP: Parsing completed sucessfully, data available in Data.matrixCost.");
 		}
 
 	
@@ -174,5 +174,7 @@ public class DataTSP extends Data{
 		matrixCost = matrix_cost;
 	}
 	
-
+	public int getNbCity() {
+		return nbCity;
+	}
 }
