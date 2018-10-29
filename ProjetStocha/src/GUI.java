@@ -36,9 +36,16 @@ public class GUI implements ActionListener{
 	private static JLabel whatFile;
 	private static JButton startButton;
 	
+	//infos
+	private static JLabel timeTaken;
+	private static JLabel totalCost;
+	private static double time = 0;
+	private static double cost = 0;
+	
 	private static JFrame frame;
 	private static JPanel panel;
 	private static JPanel menu;
+	
 	
 	//radiobuttons
 	private static JRadioButton buttonStocha;
@@ -48,7 +55,6 @@ public class GUI implements ActionListener{
  
 	public GUI() {
 		citiesPanel =  new GUICitiesPanel();
-
 		data = new DataTSP();
 		
 	}
@@ -61,11 +67,16 @@ public class GUI implements ActionListener{
 
 		System.out.println("\n---WARNING: GUI standing by.");
 
-		//Main window frame
+		//Main window frame, panel and menu
 		frame = new JFrame("TSP Solver");
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 	    frame.setPreferredSize(new Dimension(1032, 755));
-
+	    panel = new JPanel(new BorderLayout());
+		menu = new JPanel();
+		menu.setPreferredSize(new Dimension(300, 100));
+		menu.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
+		menu.setLayout(new BoxLayout(menu, BoxLayout.Y_AXIS));
+		Dimension dim = new Dimension(250, 150);
 
         
         // ********************************************************
@@ -107,6 +118,7 @@ public class GUI implements ActionListener{
 		//openbutton
 		fcBox.add(openButton);
 		fcBox.add(whatFile);
+		fcBox.setMaximumSize(dim);
 
         
 		// ********************************************************
@@ -130,7 +142,7 @@ public class GUI implements ActionListener{
 
 		checkOptions.add(buttonStocha);
 		checkOptions.add(buttonDeter);	
-		
+		checkOptions.setMaximumSize(dim);
 		
 
 		// ********************************************************
@@ -176,20 +188,35 @@ public class GUI implements ActionListener{
 		JPanel wrapper = new JPanel();
 		wrapper.add( CplexOrAnnealingCombo );
 		comboOptions.add( wrapper );
+		comboOptions.setMaximumSize(dim);
+
+
+		//
+		// Infos
+		
+		JPanel informations = new JPanel(new GridLayout(0, 1));
+		Border border3 = BorderFactory.createTitledBorder("Informations");
+		informations.setBorder(new CompoundBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0), border3));
+
+
+		timeTaken = new JLabel("The time taken to compute is " + time);
+		totalCost = new JLabel("The total cost of this route is " + cost);
+		
+		informations.add(timeTaken);
+		informations.add(totalCost);
+		informations.setMaximumSize(dim);
+
+		
 		
 		// ********************************************************
 		// Panel et menu generaux
 
-		panel = new JPanel(new BorderLayout());
-
-		menu = new JPanel();
-		menu.setPreferredSize(new Dimension(300, 100));
-		menu.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
-		menu.setLayout(new BoxLayout(menu, BoxLayout.Y_AXIS));
+		
 
 		menu.add(fcBox);
 		menu.add(checkOptions);
 		menu.add(comboOptions);
+		menu.add(informations);
 		menu.add(new JSeparator(JSeparator.HORIZONTAL));
 		
 		//Start button to start the computation
@@ -245,6 +272,12 @@ public class GUI implements ActionListener{
 			//data.displayMatrix();
 			//creating the panel in which the cities will be displayed
 			citiesPanel.getData(data);
+
+			//TODO link time and cost
+			time = 100.;
+			cost = 9000.;
+			timeTaken.setText("The time taken to compute is " + time);
+			totalCost.setText("The total cost of this route is " + cost);
 
         	}
         	else
