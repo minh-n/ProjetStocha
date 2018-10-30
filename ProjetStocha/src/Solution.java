@@ -18,4 +18,7 @@ public abstract class Solution {
 		return this.associatedValue;
 	}
 
+	
+	protected abstract void displaySolution();
+	
 }
