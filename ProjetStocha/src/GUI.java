@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Timer;
 
 import javax.swing.*;
 
@@ -264,6 +265,8 @@ public class GUI implements ActionListener{
         
         if (e.getSource() == startButton) {
             
+
+
         	if (currentFilename != null)
         	{
             System.out.println("\nGUI: Starting computation!! Please wait...");
@@ -278,6 +281,8 @@ public class GUI implements ActionListener{
 			cost = 9000.;
 			timeTaken.setText("The time taken to compute is " + time);
 			totalCost.setText("The total cost of this route is " + cost);
+			
+			citiesPanel.repaint();
 
         	}
         	else

@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Timer;
 import java.util.concurrent.Callable;
 
 import javax.swing.*;
@@ -18,8 +19,11 @@ import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
+import java.awt.Shape;
 import java.awt.Stroke;
 import java.awt.event.*;
+import java.awt.geom.Line2D;
+
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import javax.swing.event.ListSelectionEvent;
@@ -47,6 +51,10 @@ public class GUICitiesPanel extends JPanel implements MouseMotionListener, Compo
 
 	public void getData(DataTSP data) {
 		
+		//TODO timer
+		//Timer t = new Timer();
+	    //t.start();
+	    
 		System.out.println("\n---WARNING: Data cleared. CitiesPanel standing by.");
 
 		citiesPosition.clear();
@@ -69,14 +77,24 @@ public class GUICitiesPanel extends JPanel implements MouseMotionListener, Compo
 	
 	public void paintPath(Graphics2D g) {
 		
+		System.out.println("\n--GUICitiesPanel: painting the paths.");
 		g.setColor(Color.BLACK); 
-		
-		for (int i=0; i< this.nbCity -1 ; ++i)
-		{
-			//g.drawLine();
-					
+
+		for (int i = 0; i < nbCity; i++) {
+			for (int j = 0; j < nbCity; j++) {
+				if (true)	//TODO replace with matriceSol[i][j]
+				{
+					//System.out.println("Debug: Link found between city " + i + " and " + j +".");
+					City c1 = citiesPositionForDisplay.get(i);
+					City c2 = citiesPositionForDisplay.get(j);
+                    Shape l = new Line2D.Double(c1.getX()+2, c1.getY()+2, c2.getX()+2, c2.getY()+2);
+                    g.draw(l);
+                    
+					break;
+				}
+			}
 		}
-		
+
 	}
 
 	public void setCitiesPositionForDisplay() {
@@ -85,7 +103,7 @@ public class GUICitiesPanel extends JPanel implements MouseMotionListener, Compo
 		//getting the max panel size
 		double maxSize = (this.getWidth() > this.getHeight()) ? this.getHeight() : this.getWidth();
 		//computing the coefficient between maxsize and 
-		double sideCoef = maxSize / ((windowSize.height + windowSize.width)/2);
+		double sideCoef = maxSize / (windowSize.height > windowSize.width ? windowSize.height : windowSize.width);
 
 		int id = 0;
 		// Iterating through list of cities, changing their position according to screen size
@@ -99,7 +117,7 @@ public class GUICitiesPanel extends JPanel implements MouseMotionListener, Compo
 
 	public void setWindowBorders() {
 
-		System.out.println("\nDebug: GUICitiesPanel: setting window borders.");
+		System.out.println("\n--GUICitiesPanel: setting window borders.");
 		City cityMin = new City(citiesPosition.get(0).getX(), citiesPosition.get(0).getY(), -1);
 		City cityMax = new City(citiesPosition.get(0).getX(), citiesPosition.get(0).getY(), -2);
 
@@ -127,14 +145,14 @@ public class GUICitiesPanel extends JPanel implements MouseMotionListener, Compo
 //			cityMax.setY(cityMax.getY()+margin);
 
 		// setting window size using the max and min found
-		// the coefficients are not set in the stone yet, this is still methode habile
+		// the coefficients are not set in stone yet, this is still methode habile
 		windowSize = new Rectangle.Double(cityMin.getX() - (cityMax.getX() - cityMin.getX()) * 0.02,
 
 				cityMin.getY() - (cityMax.getY() - cityMin.getY()) * 0.02,
 
-				cityMax.getX() - cityMin.getX() + (cityMax.getX() - cityMin.getX()) * 0.2,
+				cityMax.getX() - cityMin.getX() + (cityMax.getX() - cityMin.getX()) * 0.1,
 
-				cityMax.getY() - cityMin.getY() + (cityMax.getY() - cityMin.getY()) * 0.2);
+				cityMax.getY() - cityMin.getY() + (cityMax.getY() - cityMin.getY()) * 0.1);
 
 		// System.out.println("\nDebug: GUICitiesPanel: Window border " + windowSize);
 	}
@@ -158,11 +176,12 @@ public class GUICitiesPanel extends JPanel implements MouseMotionListener, Compo
 
 		// Displaying each cities
 		for (City c : citiesPositionForDisplay) {
-			g.fillRect((int) c.getX(), (int) c.getY(), 5, 5);
+			g.fillRect((int) c.getX(), (int) c.getY(), 4, 4);
 
 		}
 
-		// getPath(); will do later
+		this.paintPath(g);//will do later
+		
 	}
 
 	public void getPositionsFromCost(boolean test) {
@@ -171,7 +190,7 @@ public class GUICitiesPanel extends JPanel implements MouseMotionListener, Compo
 
 		Matrix M = new Matrix(nbCity, nbCity);
 
-		System.out.println("GUICitiesPanel (getPosFromCost): created a M matrix of dimension (" + M.getColumnDimension()
+		System.out.println("--GUICitiesPanel (getPosFromCost): created a M matrix of dimension (" + M.getColumnDimension()
 				+ ", " + M.getRowDimension() + ").\n");
 		for (int i = 0; i < nbCity; i++) {
 			for (int j = 0; j < nbCity; j++) {
@@ -229,7 +248,7 @@ public class GUICitiesPanel extends JPanel implements MouseMotionListener, Compo
 
 			diff = 100. * diff / (nbCity * nbCity);
 
-			System.out.println("Mean % of difference between values is " + diff + "%.");
+			System.out.println("Mean % of difference between values is " + diff + "%.\n");
 //			
 //			System.out.println("SAMPLE: " + this.citiesPosition.get(3));
 //			System.out.println("SAMPLE: " + this.citiesPosition.get(15));
@@ -281,7 +300,7 @@ public class GUICitiesPanel extends JPanel implements MouseMotionListener, Compo
 
 	@Override
 	public void mouseMoved(MouseEvent arg0) {
-		repaint();
+		
 
 	}
 

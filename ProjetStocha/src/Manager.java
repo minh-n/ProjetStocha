@@ -1,3 +1,5 @@
+import java.util.Timer;
+
 public class Manager {
 	
 	private static GUICitiesPanel citiesPanel;
@@ -8,7 +10,7 @@ public class Manager {
 
 		System.out.println("\n---WARNING: Manager standing by.");
 		
-		
+
 		GUI gui = new GUI();
 		gui.createNewJFrame();
 	}
