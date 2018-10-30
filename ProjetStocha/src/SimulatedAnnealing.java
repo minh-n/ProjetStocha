@@ -8,18 +8,21 @@ public abstract class SimulatedAnnealing
 	protected int currentTemperature;
 	protected int nbIteration;
 	protected int currentIteration;
-	protected float AcceptationRate;
+	protected float acceptationRate;
 	protected int nbPalierMax;
 	protected int currentPalier;
+	protected Solution currentSol;
 	//il y aura ptetre des current a virer
 
 	
 	
 	//----------CONST GET SET-------------------
 	
-	public SimulatedAnnealing()
+	public SimulatedAnnealing(LinearProblem pb, int nbIteration, int nbPalierMax)
 	{
-		
+		this.pb = pb;
+		this.nbIteration = nbIteration;
+		this.nbPalierMax = nbPalierMax;
 	}
 	
 	//----------METHODS-------------------
@@ -29,22 +32,50 @@ public abstract class SimulatedAnnealing
 		
 	}
 	
-	public abstract void initTemp();
-	
-	public boolean boltzman(float cost, float newCost)
-	{
-		if (newCost>cost)
-			return true;
-		else
-			//TODO
-			return false;
-	}
-	
-	public void kirkpatrick ()
+	public double processTier(/*TODO*/)
 	{
 		//TODO
-		this.currentTemperature /= 2;
+		return 1;
 	}
+	
+	
+	public boolean refusBoltzman(float cost, float newCost)
+	{	
+		double delta = newCost-cost;
+		
+		if (!this.pb.maxMin)
+		{
+			if (delta > 0)
+				return true;
+			
+			else
+			{
+				double rand = Math.random();
+				if (Math.exp(delta/this.currentTemperature) > rand)
+					return false;
+				else return true;
+				
+			}
+		}
+		
+		else
+		{
+			if (delta < 0)
+				return true;
+			
+			else
+			{
+				double rand = Math.random();
+				if (Math.exp(-delta/this.currentTemperature) > rand)
+					return false;
+				else return true;
+				
+			}
+		}
+		
+	}
+	
+	public abstract void initTemp();
 	
 	public abstract void generateNeighbor();
 	

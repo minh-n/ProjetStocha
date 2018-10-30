@@ -16,6 +16,7 @@ public class DataTSP extends Data{
 	
 	public DataTSP()
 	{
+		//TODO mettre readinFile là dedans
 	}
 
 	public void readInputFile(String file, boolean verb)
@@ -166,6 +167,7 @@ public class DataTSP extends Data{
 			System.out.println("");
 		}
 	}
+	
 	public double[][] getMatrixCost() {
 		return matrixCost;
 	}

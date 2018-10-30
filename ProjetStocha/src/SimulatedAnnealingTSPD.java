@@ -1,39 +1,52 @@
-import java.util.ArrayList;
-
-
-public class SimulatedAnnealingTSPD extends SimulatedAnnealing
-{
+public class SimulatedAnnealingTSPD extends SimulatedAnnealing{
 	
-	private ArrayList<ArrayList<Boolean>> neighbor;
-	//for k-opt
+	//k comme k-opt
 	private int k;
 	
 	
-	public SimulatedAnnealingTSPD()
+	//-------- CONST SET GET --------------------
+	
+	public SimulatedAnnealingTSPD(LinearProblem pb, int nbIteration, int nbPalierMax, int k)
 	{
-		super();
+		
+		super(pb, nbIteration, nbPalierMax);
+		this.k = k;
+		
 	}
 	
-	public void initTemp()
+	
+	
+	//------------- METHODS -----------------------
+	
+	//KirkPatrick
+	public void initTemp ()
 	{
-		//coder l'algo voulu pour le choix de la temp
-		this.initialTemperature = 50;
+		//TODO ptetre changer cette valeur
+		int init = 10;
+		do
+		{
+			processTier();
+			init *= 2;
+		}while (this.acceptationRate < 0.8);
+		
+		
+		if (this.acceptationRate > 0.95)
+			init /= 2;
+		
+		this.initialTemperature = init;
 	}
 	
+	//K-OPT
 	public void generateNeighbor()
 	{
-		//TODO stuff : get the tempSol from the problem, and use K-opt to generate a new sol
-		ArrayList<ArrayList<Boolean>> sol = new ArrayList<ArrayList<Boolean>>();
-		sol.add(new ArrayList<Boolean>());
-		sol.add(new ArrayList<Boolean>());
-		sol.get(0).add(true);
-		sol.get(0).add(false);
-		sol.get(1).add(false);
-		sol.get(1).add(true);
+		int changes[] = new int[k];
+		for (int i = 0 ; i<k ; i++)
+		{
+			changes[i] = (int)Math.random()*((DataTSP)this.pb.getData()).getNbCity()-1;
+		}
+		//choisir k villes parmis les nb villes.
 		
-		this.neighbor = sol;
+		//changer la dest de l'arrette qui part de cette ville puis lui donner
+		//la dest de la ville choisie suivante
 	}
-	
-	
-	
 }
