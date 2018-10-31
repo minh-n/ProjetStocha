@@ -114,7 +114,7 @@ public class GUI implements ActionListener{
 		JPanel fcBox = new JPanel(new GridLayout(0, 1));
 		Border border0 = BorderFactory.createTitledBorder("File selection");
 		fcBox.setBorder(new CompoundBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0), border0));
-		whatFile = new JLabel("The selected file is " + currentFilename);
+		whatFile = new JLabel("Please select a file.");
 			
 		//openbutton
 		fcBox.add(openButton);

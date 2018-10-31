@@ -1,33 +1,19 @@
 
-import java.awt.BasicStroke;
-import java.awt.BorderLayout;
-import java.awt.Canvas;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Timer;
-import java.util.concurrent.Callable;
-
-import javax.swing.*;
-
-import java.awt.GridLayout;
-import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Shape;
-import java.awt.Stroke;
-import java.awt.event.*;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 import java.awt.geom.Line2D;
+import java.util.ArrayList;
+import java.util.List;
 
-import javax.swing.border.Border;
-import javax.swing.border.CompoundBorder;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
+import javax.swing.JPanel;
 
 import Jama.EigenvalueDecomposition;
 import Jama.Matrix;
@@ -70,13 +56,10 @@ public class GUICitiesPanel extends JPanel implements MouseMotionListener, Compo
 		// Matrix.print(nb of space for each column, number of digits after the .)
 
 		System.out.println("\nGUICitiesPanel: Calculating cities position based on the cost matrix: ");
-
 		this.getPositionsFromCost(true);
-
 	}
 	
 	public void paintPath(Graphics2D g) {
-		
 		System.out.println("\n--GUICitiesPanel: painting the paths.");
 		g.setColor(Color.BLACK); 
 
@@ -94,7 +77,6 @@ public class GUICitiesPanel extends JPanel implements MouseMotionListener, Compo
 				}
 			}
 		}
-
 	}
 
 	public void setCitiesPositionForDisplay() {
