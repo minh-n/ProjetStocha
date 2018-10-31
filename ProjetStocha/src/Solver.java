@@ -1,6 +1,7 @@
-
 public abstract class Solver
 {
-	public Solver() {}
+	protected LinearProblem problem;
+	
+	protected abstract Solution solve();
 
 }

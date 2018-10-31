@@ -31,7 +31,6 @@ public abstract class LinearProblem
 		this.maxMin = maxmin;
 	}
 	
-	
 	public Data getData()
 	{
 		return this.data;

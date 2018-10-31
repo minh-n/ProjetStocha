@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="ProjetStocha/src"/>
+	<classpathentry kind="lib" path="ProjetStocha/lib/Jama-1.0.3.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files/IBM/ILOG/CPLEX_Studio128/cplex/lib/cplex.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
