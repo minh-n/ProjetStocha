@@ -21,4 +21,6 @@ public abstract class Solution {
 	
 	protected abstract void displaySolution();
 	
+	public abstract Solution cloneSol();
+	
 }

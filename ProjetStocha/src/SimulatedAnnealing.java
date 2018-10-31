@@ -77,6 +77,8 @@ public abstract class SimulatedAnnealing
 	
 	public abstract void initTemp();
 	
-	public abstract void generateNeighbor();
+	public abstract Solution generateNeighbor();
+	
+	public abstract void initSol();
 	
 }

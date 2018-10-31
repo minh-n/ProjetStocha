@@ -9,6 +9,7 @@ public class SolutionTSP extends Solution {
 		super();
 	}
 	
+	
 	public SolutionTSP(int sol[][]) {
 		super();
 		this.sol = sol;
@@ -38,5 +39,19 @@ public class SolutionTSP extends Solution {
         }
     }
 
+	
+	public Solution cloneSol()
+	{
+		int nbCity = this.sol.length;
+		int solCopy[][] = new int[nbCity][nbCity];
+		
+		for (int i=0 ; i<nbCity ; i++)
+		{
+			solCopy[i] = this.sol[i].clone();
+		}
+		
+		SolutionTSP solutionCopy = new SolutionTSP(solCopy);
+		return solutionCopy;
+	}
 	
 }
