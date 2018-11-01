@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Hashtable;
 import java.util.Timer;
 
 import javax.swing.*;
@@ -20,11 +21,15 @@ import java.awt.event.*;
 
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
+
+import org.omg.CosNaming.NamingContextExtPackage.AddressHelper;
 
 import ilog.concert.IloException;
 
-public class GUI implements ActionListener{
+public class GUI implements ActionListener, ChangeListener{
 
 
 	public boolean verbose = false;
@@ -39,11 +44,22 @@ public class GUI implements ActionListener{
 	private static JLabel whatFile;
 	private static JButton startButton;
 	
+	//parameters for the Annealing
+	private static JSlider sliderTempCoef;
+	private static JSlider sliderAcceptRate;
+	private static JSlider sliderIteNumber;
+
+	
 	//infos
 	private static JLabel timeTaken;
 	private static JLabel totalCost;
+	private static JLabel initialTemp;
+	private static JLabel initialCost;
+
 	private static double time = 0;
 	private static double cost = 0;
+	private static double initTemp = 0.;
+	private static double initCost = 0.;
 	
 	private static JFrame frame;
 	private static JPanel panel;
@@ -60,12 +76,18 @@ public class GUI implements ActionListener{
 		citiesPanel =  new GUICitiesPanel();
 		data = new DataTSP();
 		
+		//TODO: set the correct values for the sliders
+		sliderTempCoef = new JSlider(0, 10, 9);
+		sliderAcceptRate = new JSlider(0, 10);
+		sliderIteNumber = new JSlider(0, 1000);
+		
 	}
 
 	
 	//**************************************FRAME**************************************//
 	
 	
+	@SuppressWarnings("unchecked")
 	public void createNewJFrame() {
 
 		System.out.println("\n---WARNING: GUI standing by.");
@@ -193,8 +215,71 @@ public class GUI implements ActionListener{
 		comboOptions.add( wrapper );
 		comboOptions.setMaximumSize(dim);
 
+		
+		
+		
+		
+		
+		
+		
+		
+		// ********************************************************
+		// Sliders
+		
+		JPanel sliders = new JPanel(new GridLayout(0, 1));
+		Border border6 = BorderFactory.createTitledBorder("Annealing parameters");
+		sliders.setBorder(new CompoundBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0), border6));
 
-		//
+
+		 
+		sliderTempCoef.setPaintLabels(true);
+		sliderAcceptRate.setPaintLabels(true);
+		sliderIteNumber.setPaintLabels(true);
+		
+		sliderIteNumber.addChangeListener(this);
+		sliderAcceptRate.addChangeListener(this);
+		sliderTempCoef.addChangeListener(this);
+
+		
+		@SuppressWarnings("rawtypes")
+		Hashtable labelTable = new Hashtable();
+		labelTable.put( new Integer( 0 ), new JLabel("0.0") );
+		labelTable.put( new Integer( 5 ), new JLabel("0.5") );
+		labelTable.put( new Integer( 10 ), new JLabel("1.0") );
+		sliderTempCoef.setLabelTable( labelTable );
+		sliderAcceptRate.setLabelTable( labelTable );
+		
+		@SuppressWarnings("rawtypes")
+		Hashtable labelTable2 = new Hashtable();
+		labelTable2.put( new Integer( 0 ), new JLabel("0.0") );
+		labelTable2.put( new Integer( 500 ), new JLabel("500") );
+		labelTable2.put( new Integer( 1000 ), new JLabel("1000") );
+		sliderIteNumber.setLabelTable( labelTable2 );
+
+		
+        // Add change listener to the slider
+//		sliderIteNumber.addChangeListener(new ChangeListener() {
+//
+//            public void stateChanged(ChangeEvent e) {
+//
+//                status.setText("Value of the slider is: " + ((JSlider)e.getSource()).getValue());
+//
+//            }
+//
+//        });
+
+		
+		sliders.add(new JLabel("Temperature coefficient: "));
+		sliders.add(sliderTempCoef);
+
+		
+		sliders.add(new JLabel("Acceptance rate: "));
+		sliders.add(sliderAcceptRate);
+		
+		sliders.add(new JLabel("Iteration number: "));
+		sliders.add(sliderIteNumber);
+
+		// ********************************************************
 		// Infos
 		
 		JPanel informations = new JPanel(new GridLayout(0, 1));
@@ -204,9 +289,15 @@ public class GUI implements ActionListener{
 
 		timeTaken = new JLabel("The time taken to compute is " + time);
 		totalCost = new JLabel("The total cost of this route is " + cost);
+
+		initialTemp = new JLabel("The initial temperature is " + getInitTemp());
+		initialCost  = new JLabel("The initial cost of this route is " + getInitCost());
 		
-		informations.add(timeTaken);
+		informations.add(initialTemp);
+		informations.add(initialCost);
 		informations.add(totalCost);
+		informations.add(timeTaken);
+
 		informations.setMaximumSize(dim);
 
 		
@@ -214,11 +305,10 @@ public class GUI implements ActionListener{
 		// ********************************************************
 		// Panel et menu generaux
 
-		
-
 		menu.add(fcBox);
 		menu.add(checkOptions);
 		menu.add(comboOptions);
+		menu.add(sliders);
 		menu.add(informations);
 		menu.add(new JSeparator(JSeparator.HORIZONTAL));
 		
@@ -244,6 +334,37 @@ public class GUI implements ActionListener{
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 	}
+	
+    /** Listen to the slider. */
+    public void stateChanged(ChangeEvent e) {
+        JSlider source = (JSlider)e.getSource();
+        if (!source.getValueIsAdjusting()) {
+        	if(e.getSource() == sliderAcceptRate)
+        	{  
+        		double value = source.getValue()/10.;
+          
+        		System.out.println("Slider Accept rate = " + value);
+
+        	}
+        	else if(e.getSource() == sliderTempCoef)
+        	{
+        		double value = source.getValue()/10.;
+
+        		System.out.println("Slider temp coef =" + value );
+
+        	}
+        	else
+        	{
+        		int value = (int)source.getValue();
+
+        		System.out.println("Slider nb Ite =" + value );
+
+        	}
+            
+        }
+    }
+    
+    
 
     public void actionPerformed(ActionEvent e) {
 
@@ -288,11 +409,17 @@ public class GUI implements ActionListener{
 			//creating the panel in which the cities will be displayed
 			citiesPanel.getData(data);
 			
-			//TODO link time and cost
+			//TODO link time and cost, initial temp and cost
 			time = 100.;
-			//cost = 9000.;
+			cost = 9000.;
+			setInitTemp(999.);
+			setInitCost(8999.);
+			
 			timeTaken.setText("The time taken to compute is " + time);
 			totalCost.setText("The total cost of this route is " + cost);
+
+			initialTemp.setText("The initial temperature is " + getInitTemp());
+			initialCost.setText("The initial cost of this route is " + getInitCost());
 			
 			citiesPanel.repaint();
 
@@ -316,7 +443,6 @@ public class GUI implements ActionListener{
 			//TODO : put this information into a boolean
 
         }
-
     
     }
 
@@ -346,6 +472,76 @@ public class GUI implements ActionListener{
 
 	public static void setFileChooser(JFileChooser fileChooser) {
 		GUI.fileChooser = fileChooser;
+	}
+
+
+	public static JSlider getSliderTempCoef() {
+		return sliderTempCoef;
+	}
+
+
+	public static void setSliderTempCoef(JSlider sliderTempCoef) {
+		GUI.sliderTempCoef = sliderTempCoef;
+	}
+
+
+	public static JSlider getSliderAcceptRate() {
+		return sliderAcceptRate;
+	}
+
+
+	public static void setSliderAcceptRate(JSlider sliderAcceptRate) {
+		GUI.sliderAcceptRate = sliderAcceptRate;
+	}
+
+
+	public static JSlider getSliderIteNumber() {
+		return sliderIteNumber;
+	}
+
+
+	public static void setSliderIteNumber(JSlider sliderIteNumber) {
+		GUI.sliderIteNumber = sliderIteNumber;
+	}
+
+
+	public static JLabel getInitialTemp() {
+		return initialTemp;
+	}
+
+
+	public static void setInitialTemp(JLabel initialTemp) {
+		GUI.initialTemp = initialTemp;
+	}
+
+
+	public static JLabel getInitialCost() {
+		return initialCost;
+	}
+
+
+	public static void setInitialCost(JLabel initialCost) {
+		GUI.initialCost = initialCost;
+	}
+
+
+	public static double getInitTemp() {
+		return initTemp;
+	}
+
+
+	public static void setInitTemp(double initTemp) {
+		GUI.initTemp = initTemp;
+	}
+
+
+	public static double getInitCost() {
+		return initCost;
+	}
+
+
+	public static void setInitCost(double initCost) {
+		GUI.initCost = initCost;
 	}
 
 }
