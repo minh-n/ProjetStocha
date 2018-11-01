@@ -4,8 +4,10 @@ import ilog.cplex.*;
 public abstract class CPLEX extends Solver{
 	protected IloCplex model;
 	protected IloLinearNumExpr objective;
+	protected boolean find;
 	
-	public CPLEX() throws IloException {
+	public CPLEX(LinearProblem problem) throws IloException {
+		super(problem);
 		model = new IloCplex();
 		objective = model.linearNumExpr();
 		addVariables();

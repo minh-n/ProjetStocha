@@ -22,6 +22,8 @@ import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import ilog.concert.IloException;
+
 public class GUI implements ActionListener{
 
 
@@ -272,13 +274,23 @@ public class GUI implements ActionListener{
             System.out.println("\nGUI: Starting computation!! Please wait...");
 			data.readInputFile(currentFilename, verbose);
 			
+			//TODO faire en fct du choix de l'utilisateur			
+			TSP problem = new TSP(data, false, false);
+			try {
+				CPLEXTSP solver = new CPLEXTSP(problem);
+				//solver.solve();
+				cost = problem.getCost();
+			} catch (IloException e1) {
+				e1.printStackTrace();
+			}
+			
 			//data.displayMatrix();
 			//creating the panel in which the cities will be displayed
 			citiesPanel.getData(data);
-
+			
 			//TODO link time and cost
 			time = 100.;
-			cost = 9000.;
+			//cost = 9000.;
 			timeTaken.setText("The time taken to compute is " + time);
 			totalCost.setText("The total cost of this route is " + cost);
 			

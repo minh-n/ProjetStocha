@@ -15,13 +15,10 @@ public class Manager {
 		gui.createNewJFrame();
 	}
 	
-	
 	public static GUICitiesPanel getCitiesPanel() {
 		return citiesPanel;
 	}
 	public static void setCitiesPanel(GUICitiesPanel citiesPanel) {
 		Manager.citiesPanel = citiesPanel;
 	}
-
-
 }

@@ -63,17 +63,22 @@ public class GUICitiesPanel extends JPanel implements MouseMotionListener, Compo
 		System.out.println("\n--GUICitiesPanel: painting the paths.");
 		g.setColor(Color.BLACK); 
 
-		for (int i = 0; i < nbCity; i++) {
-			for (int j = 0; j < nbCity; j++) {
-				if (true)	//TODO replace with matriceSol[i][j]
-				{
-					//System.out.println("Debug: Link found between city " + i + " and " + j +".");
-					City c1 = citiesPositionForDisplay.get(i);
-					City c2 = citiesPositionForDisplay.get(j);
-                    Shape l = new Line2D.Double(c1.getX()+2, c1.getY()+2, c2.getX()+2, c2.getY()+2);
-                    g.draw(l);
-                    
-					break;
+		//TODO instance of c'est moche
+		if(LinearProblem.getSol() instanceof SolutionTSP) 
+		{
+			final int[][] solution = ((SolutionTSP)LinearProblem.getSol()).getSol();
+			for (int i = 0; i < nbCity; i++) {
+				for (int j = 0; j < nbCity; j++) {
+					if(solution[i][j] == 1)	//TODO replace with matriceSol[i][j]
+					{
+						//System.out.println("Debug: Link found between city " + i + " and " + j +".");
+						City c1 = citiesPositionForDisplay.get(i);
+						City c2 = citiesPositionForDisplay.get(j);
+	                    Shape l = new Line2D.Double(c1.getX()+2, c1.getY()+2, c2.getX()+2, c2.getY()+2);
+	                    g.draw(l);
+	                    
+						break;
+					}
 				}
 			}
 		}

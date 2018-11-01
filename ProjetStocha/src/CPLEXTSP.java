@@ -1,43 +1,51 @@
 import ilog.concert.*;
 
 public class CPLEXTSP extends CPLEX{
-	private int nbCities;
-	private double[][] matrixCost;
 	private IloNumVar[][] matrixSolution; 
 
-	public CPLEXTSP() throws IloException {
-		super();
-		nbCities = ((DataTSP)problem.getData()).getNbCity();
-		matrixCost = ((DataTSP)problem.getData()).getMatrixCost();
+	public CPLEXTSP(LinearProblem problem) throws IloException {
+		super(problem);
+		this.solve();
 	}
 	
-	protected int[][] castInIntMatrix() throws IloException {
-		int[][] solution = new int[nbCities][nbCities];
-		for(int i = 0; i < nbCities; i++) {
-			for(int j = 0; j < nbCities; i++) {
-				solution[i][j] = (int) model.getValue(matrixSolution[i][j]);
+	protected int[][] castMatrixInInt() throws IloException {
+		if(find) {
+			int nbCities = ((DataTSP)problem.getData()).getNbCity();
+			int[][] solution = new int[nbCities][nbCities];
+			for(int i = 0; i < nbCities; i++) {
+				for(int j = 0; j < nbCities; j++) {
+					if(j != i)
+						solution[i][j] = (int) model.getValue(matrixSolution[i][j]);
+					else
+						solution[i][j] = 0;
+				}
 			}
+			return solution;
 		}
-		return solution;
+		return null;
 	}
 
 	@Override
-	protected Solution solve() {
+	protected void solve() {
 		SolutionTSP result = solveWithSubtourElimination(); 
 		try {
+			problem.setCost(model.getObjValue());
 			endResolution();
 		} catch (IloException e) {
 			e.printStackTrace();
 		}
-		return result;
+		//TODO else
+		if(result != null)
+			LinearProblem.setSol(result);
 	}
 	
 	private SolutionTSP solveWithSubtourElimination() {
 		SolutionTSP result = new SolutionTSP(); 
 		try {
-			model.solve();
-			result.setSol(castInIntMatrix());
-			result = new IterativeAlgorithmTSP(this).loop();
+			find = model.solve();
+			result.setSol(castMatrixInInt());
+			if(result != null)
+				result = new IterativeAlgorithmTSP(this).loop();
 		} catch (IloException e) {
 			e.printStackTrace();
 		}
@@ -46,14 +54,19 @@ public class CPLEXTSP extends CPLEX{
 	
 	@Override
 	protected void addVariables() throws IloException {
-		matrixSolution = new IloNumVar[nbCities][];
+		int nbCities = ((DataTSP)problem.getData()).getNbCity();
+		matrixSolution = new IloNumVar[nbCities][nbCities];
 		for(int i = 0; i < nbCities; i++) {
-			matrixSolution[i] = model.boolVarArray(nbCities);
+			for(int j = 0; j < nbCities; j++) {
+				matrixSolution[i][j] = model.boolVar();
+			}
 		}
 	}
 
 	@Override
 	protected void initializeObjective() throws IloException {
+		int nbCities = ((DataTSP)problem.getData()).getNbCity();
+		final double[][] matrixCost = ((DataTSP)problem.getData()).getMatrixCost();
 		for(int i = 0; i < nbCities; i++) {
 			for(int j = 0; j < nbCities; j++) {
 				if(j != i) 
@@ -64,6 +77,7 @@ public class CPLEXTSP extends CPLEX{
 
 	@Override
 	protected void addConstraints() throws IloException {
+		int nbCities = ((DataTSP)problem.getData()).getNbCity();
 		for(int j = 0; j < nbCities; j++) {
 			IloLinearNumExpr constraint1a = model.linearNumExpr();
 			for(int i = 0; i < nbCities; i++) {

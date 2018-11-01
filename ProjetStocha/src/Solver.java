@@ -2,6 +2,9 @@ public abstract class Solver
 {
 	protected LinearProblem problem;
 	
-	protected abstract Solution solve();
-
+	public Solver(LinearProblem problem) {
+		this.problem = problem;
+	}
+	
+	protected abstract void solve();
 }

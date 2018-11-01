@@ -12,10 +12,11 @@ public abstract class LinearProblem
 	protected double matConstraints[][];
 	protected double secondMembre[];
 	
-	protected Solution sol;
+	protected static Solution sol;
+	protected double cost;
 	
 	//----------CONST GET SET------------------
-	
+
 	public LinearProblem(DataTSP data, boolean maxmin, double matConstraints[][], double secondMembre[])
 	{
 		this.data = data;
@@ -51,12 +52,22 @@ public abstract class LinearProblem
 		return this.maxMin;
 	}
 	
-	public Solution getSol()
+	public static Solution getSol()
 	{
-		return this.sol;
+		return sol;
 	}
 	
+	public static void setSol(Solution sol) {
+		LinearProblem.sol = sol;
+	}
 	
+	public double getCost() {
+		return cost;
+	}
+
+	public void setCost(double cost) {
+		this.cost = cost;
+	}
 	
 	//--------------METHODS------------------
 	
