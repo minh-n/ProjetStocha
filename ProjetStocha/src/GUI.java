@@ -411,9 +411,9 @@ public class GUI implements ActionListener, ChangeListener{
 			
 			//TODO link time and cost, initial temp and cost
 			time = 100.;
-			cost = 9000.;
+			//cost = 9000.;
 			setInitTemp(999.);
-			setInitCost(8999.);
+			//setInitCost(8999.);
 			
 			timeTaken.setText("The time taken to compute is " + time);
 			totalCost.setText("The total cost of this route is " + cost);
