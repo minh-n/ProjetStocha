@@ -96,16 +96,17 @@ public class CPLEXTSP2 extends CPLEX{
 	
 	private void addConstraint1c(IloCplex model, int[][] solution) throws IloException {
 		ArrayList<ArrayList<Integer>> subtour = createSubtour(createLap(solution));
-		if(subtour.size() > 1) {
-			for(int i = 0; i < subtour.size(); i++) {
+		int size = subtour.size();
+		if(size > 1) {
+			for(int i = 0; i < size; i++) {
 				IloLinearNumExpr constraint1c = model.linearNumExpr();
-				for(int j = 0; j < subtour.get(i).size(); j++) {
-					if(j+1 < subtour.get(i).size())
-						constraint1c.addTerm(1.0, matrixSolution[subtour.get(i).get(j)][subtour.get(i).get(j+1)]);
-					else
-						constraint1c.addTerm(1.0, matrixSolution[subtour.get(i).get(j)][subtour.get(i).get(0)]);
+				final ArrayList<Integer> tmp = subtour.get(i);
+				for(int j = 0; j < tmp.size(); j++) {
+					for(int k = 0; k < tmp.size(); k++) {
+						constraint1c.addTerm(1.0, matrixSolution[tmp.get(j)][tmp.get(k)]);
+					}
 				}
-				model.addLe(constraint1c, subtour.get(i).size()-1);
+				model.addLe(constraint1c, tmp.size()-1);
 			}
 		}
 	}
@@ -157,6 +158,20 @@ public class CPLEXTSP2 extends CPLEX{
 		@Override
 		protected void main() throws IloException {
 			addConstraint1c(model, castMatrixInInt()); 
+		}
+		
+		protected int[][] castMatrixInInt() throws IloException {
+			int nbCities = ((DataTSP)problem.getData()).getNbCity();
+			int[][] solution = new int[nbCities][nbCities];
+			for(int i = 0; i < nbCities; i++) {
+				for(int j = 0; j < nbCities; j++) {
+					if(j != i)
+						solution[i][j] = (int) this.getValue(matrixSolution[i][j]);
+					else
+						solution[i][j] = 0;
+				}
+			}
+			return solution;
 		}
 	}
 }

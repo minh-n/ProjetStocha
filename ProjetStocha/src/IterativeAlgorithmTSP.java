@@ -1,6 +1,5 @@
 import java.util.ArrayList;
 import ilog.concert.*;
-import ilog.cplex.*;
 
 public class IterativeAlgorithmTSP extends IterativeAlgorithm
 {
@@ -28,7 +27,7 @@ public class IterativeAlgorithmTSP extends IterativeAlgorithm
 		try {
 			result.setSol(algo.castMatrixInInt());
 			if(result != null) {
-				while(addConstraint1c(algo.model, result)) {
+				while(addConstraint1c(result)) {
 					result = oracle();
 					if(result == null)
 						break;
@@ -40,20 +39,39 @@ public class IterativeAlgorithmTSP extends IterativeAlgorithm
 		return result;
 	}
 	
-	private boolean addConstraint1c(IloCplex model, SolutionTSP solution) throws IloException {
+//	private boolean addConstraint1c(SolutionTSP solution) throws IloException {
+//		ArrayList<ArrayList<Integer>> subtour = createSubtour(createLap(solution));
+//		if(subtour.size() > 1) {
+//			for(int i = 0; i < subtour.size(); i++) {
+//				IloLinearNumExpr constraint1c = algo.model.linearNumExpr();
+//				if(subtour.get(i).size() > 1) {
+//					for(int j = 0; j < subtour.get(i).size(); j++) {
+//						if(j+1 < subtour.get(i).size())
+//							constraint1c.addTerm(1.0, algo.getMatrixSolution()[subtour.get(i).get(j)][subtour.get(i).get(j+1)]);
+//						else
+//							constraint1c.addTerm(1.0, algo.getMatrixSolution()[subtour.get(i).get(j)][subtour.get(i).get(0)]);
+//					}
+//					algo.model.addLe(constraint1c, subtour.get(i).size()-1);
+//				}
+//			}
+//			return true;
+//		}
+//		else 
+//			return false;
+//	}
+	
+	private boolean addConstraint1c(SolutionTSP solution) throws IloException {
 		ArrayList<ArrayList<Integer>> subtour = createSubtour(createLap(solution));
 		if(subtour.size() > 1) {
 			for(int i = 0; i < subtour.size(); i++) {
 				IloLinearNumExpr constraint1c = algo.model.linearNumExpr();
-				if(subtour.get(i).size() > 1) {
-					for(int j = 0; j < subtour.get(i).size(); j++) {
-						if(j+1 < subtour.get(i).size())
-							constraint1c.addTerm(1.0, algo.getMatrixSolution()[subtour.get(i).get(j)][subtour.get(i).get(j+1)]);
-						else
-							constraint1c.addTerm(1.0, algo.getMatrixSolution()[subtour.get(i).get(j)][subtour.get(i).get(0)]);
+				final ArrayList<Integer> tmp = subtour.get(i);
+				for(int j = 0; j < tmp.size(); j++) {
+					for(int k = 0; k < tmp.size(); k++) {
+						constraint1c.addTerm(1.0, algo.getMatrixSolution()[tmp.get(j)][tmp.get(k)]);
 					}
-					algo.model.addLe(constraint1c, subtour.get(i).size()-1);
 				}
+				algo.model.addLe(constraint1c, tmp.size()-1);
 			}
 			return true;
 		}
@@ -99,25 +117,6 @@ public class IterativeAlgorithmTSP extends IterativeAlgorithm
 //		return lap;
 //	}
 	
-	private ArrayList<Integer> createLap(SolutionTSP solution) {
-		ArrayList<Integer> lap = new ArrayList<Integer>();
-		final int[][] matrixSolution = solution.getSol();
-		int size = matrixSolution.length;
-		for(int i = 0; i < size; i++) {
-			int tmp = -1;
-			for(int j = 0; j < size; j++) {
-				if(matrixSolution[i][j] == 1) {
-					tmp = j;
-					lap.add(tmp);
-					break;
-				}
-				if(j == size-1)
-					lap.add(tmp);
-			}
-		}
-		return lap;
-	}
-	
 //	private ArrayList<Integer> createLap(SolutionTSP solution) {
 //		ArrayList<Integer> lap = new ArrayList<Integer>();
 //		final int[][] matrixSolution = solution.getSol();
@@ -130,10 +129,39 @@ public class IterativeAlgorithmTSP extends IterativeAlgorithm
 //					lap.add(tmp);
 //					break;
 //				}
+//				if(j == size-1)
+//					lap.add(tmp);
 //			}
 //		}
 //		return lap;
 //	}
+	
+	private ArrayList<Integer> createLap(SolutionTSP solution) {
+		ArrayList<Integer> lap = new ArrayList<Integer>();
+		final int[][] matrixSolution = solution.getSol();
+		int size = matrixSolution.length;
+		for(int i = 0; i < size; i++) {
+			int tmp = -1;
+			for(int j = 0; j < size; j++) {
+				if(matrixSolution[i][j] == 1) {
+					tmp = j;
+					lap.add(tmp);
+					break;
+				}
+			}
+		}
+		
+//		System.out.println("debut test");
+//		System.out.println("taille lap : " + lap.size());
+//		int ct = 0;
+//		for(Integer i : lap) {
+//			System.out.println("index : " + ct);
+//			System.out.println(" " + i);
+//			ct++;
+//		}
+		
+		return lap;
+	}
 	
 //	private ArrayList<ArrayList<Integer>> createSubtour(ArrayList<int[]> lap) {
 //		int actualCity = 0;
@@ -146,7 +174,6 @@ public class IterativeAlgorithmTSP extends IterativeAlgorithm
 //			else if(!tour.contains(lap.get(actualCity)[1]))
 //				actualCity = lap.get(actualCity)[1];
 //			else {
-//				//TODO check prob de reference
 //				subtour.add(tour);
 //				if(i != lap.size()-1) {
 //					for(int j = 0; j < lap.size(); j++) {
@@ -159,51 +186,8 @@ public class IterativeAlgorithmTSP extends IterativeAlgorithm
 //				}
 //			}
 //		}
-//		
 //		return subtour;
 //	}
-	
-	private ArrayList<ArrayList<Integer>> createSubtour(ArrayList<Integer> lap) {
-		int actualCity = 0;
-		ArrayList<ArrayList<Integer>> subtour = new ArrayList<ArrayList<Integer>>();
-		ArrayList<Integer> tour = new ArrayList<Integer>();
-		ArrayList<Integer> views = new ArrayList<Integer>();
-		for(int i = 0; i < lap.size(); i++) {
-			if(actualCity == -1) {
-				subtour.add(tour);
-				if(i != lap.size()-1) {
-					for(int j = 0; j < lap.size(); j++) {
-						if(!views.contains(j)) {
-							actualCity = j;
-							break;
-						}
-					}
-					tour = new ArrayList<Integer>(); 
-				}
-			}
-			else {
-				tour.add(actualCity);
-				views.add(actualCity);
-				if(!tour.contains(lap.get(actualCity)))
-					actualCity = lap.get(actualCity);
-				else {
-					//TODO check prob de reference
-					subtour.add(tour);
-					if(i != lap.size()-1) {
-						for(int j = 0; j < lap.size(); j++) {
-							if(!views.contains(j)) {
-								actualCity = j;
-								break;
-							}
-						}
-						tour = new ArrayList<Integer>(); 
-					}
-				}
-			}
-		}
-		
-		return subtour;
-	}
 	
 //	private ArrayList<ArrayList<Integer>> createSubtour(ArrayList<Integer> lap) {
 //		int actualCity = 0;
@@ -211,11 +195,7 @@ public class IterativeAlgorithmTSP extends IterativeAlgorithm
 //		ArrayList<Integer> tour = new ArrayList<Integer>();
 //		ArrayList<Integer> views = new ArrayList<Integer>();
 //		for(int i = 0; i < lap.size(); i++) {
-//			tour.add(actualCity);
-//			views.add(actualCity);
-//			if(!tour.contains(lap.get(actualCity)))
-//				actualCity = lap.get(actualCity);
-//			else {
+//			if(actualCity == -1) {
 //				subtour.add(tour);
 //				if(i != lap.size()-1) {
 //					for(int j = 0; j < lap.size(); j++) {
@@ -227,7 +207,61 @@ public class IterativeAlgorithmTSP extends IterativeAlgorithm
 //					tour = new ArrayList<Integer>(); 
 //				}
 //			}
+//			else {
+//				tour.add(actualCity);
+//				views.add(actualCity);
+//				if(!tour.contains(lap.get(actualCity)))
+//					actualCity = lap.get(actualCity);
+//				else {
+//					subtour.add(tour);
+//					if(i != lap.size()-1) {
+//						for(int j = 0; j < lap.size(); j++) {
+//							if(!views.contains(j)) {
+//								actualCity = j;
+//								break;
+//							}
+//						}
+//						tour = new ArrayList<Integer>(); 
+//					}
+//				}
+//			}
 //		}
 //		return subtour;
 //	}
+	
+	private ArrayList<ArrayList<Integer>> createSubtour(ArrayList<Integer> lap) {
+		int actualCity = 0;
+		ArrayList<ArrayList<Integer>> subtour = new ArrayList<ArrayList<Integer>>();
+		ArrayList<Integer> tour = new ArrayList<Integer>();
+		ArrayList<Integer> views = new ArrayList<Integer>();
+		for(int i = 0; i < lap.size(); i++) {
+			tour.add(actualCity);
+			views.add(actualCity);
+			if(!tour.contains(lap.get(actualCity)))
+				actualCity = lap.get(actualCity);
+			else {
+				subtour.add(tour);
+				if(i != lap.size()-1) {
+					for(int j = 0; j < lap.size(); j++) {
+						if(!views.contains(j)) {
+							actualCity = j;
+							break;
+						}
+					}
+					tour = new ArrayList<Integer>(); 
+				}
+			}
+		}
+//		System.out.println("debut test");
+//		System.out.println("taille sous tour : " + subtour.size());
+//		int ct = 0;
+//		for(ArrayList<Integer> i : subtour) {
+//			System.out.println("###########\nsoustour : " + ct);
+//			for(Integer j : i) {
+//				System.out.println(" " + j);
+//			}
+//			ct++;
+//		}
+		return subtour;
+	}
 }
