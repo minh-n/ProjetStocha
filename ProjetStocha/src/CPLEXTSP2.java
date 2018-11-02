@@ -9,8 +9,8 @@ import ilog.cplex.IloCplex.LazyConstraintCallback;
 public class CPLEXTSP2 extends CPLEX{
 	private IloNumVar[][] matrixSolution; 
 
-	public CPLEXTSP2(LinearProblem problem) throws IloException {
-		super(problem);
+	public CPLEXTSP2(LinearProblem problem, boolean verbose) throws IloException {
+		super(problem, verbose);
 		this.solve();
 	}
 
@@ -21,6 +21,7 @@ public class CPLEXTSP2 extends CPLEX{
 			problem.setCost(model.getObjValue());
 			endResolution();
 			LinearProblem.setSol(result);
+			endResolution();
 		} catch (IloException e) {
 			e.printStackTrace();
 		}
@@ -29,6 +30,8 @@ public class CPLEXTSP2 extends CPLEX{
 	private SolutionTSP solveWithSubtourElimination() throws IloException {
 		SolutionTSP result = new SolutionTSP(); 
 		model.use(new SubtourElimination());
+		if(!verbose)
+			model.setOut(null);
 		model.solve();
 		System.out.println(model.getObjValue());
 		result.setSol(castMatrixInInt());

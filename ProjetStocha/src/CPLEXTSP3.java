@@ -6,15 +6,17 @@ public class CPLEXTSP3 extends CPLEX{
 	private IloNumVar[][] matrixSolution; 
 	private IloNumVar[] u;
 
-	public CPLEXTSP3(LinearProblem problem) throws IloException {
-		super(problem);
+	public CPLEXTSP3(LinearProblem problem, boolean verbose) throws IloException {
+		super(problem, verbose);
 		this.solve();
 	}
 
 	@Override
 	protected void solve() {
 		try {
-			SolutionTSP result = new SolutionTSP(); 
+			SolutionTSP result = new SolutionTSP();
+			if(!verbose)
+				model.setOut(null);
 			model.solve();
 			result.setSol(castMatrixInInt());
 			problem.setCost(model.getObjValue());

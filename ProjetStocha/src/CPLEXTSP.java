@@ -3,8 +3,8 @@ import ilog.concert.*;
 public class CPLEXTSP extends CPLEX{
 	private IloNumVar[][] matrixSolution; 
 
-	public CPLEXTSP(LinearProblem problem) throws IloException {
-		super(problem);
+	public CPLEXTSP(LinearProblem problem, boolean verbose) throws IloException {
+		super(problem, verbose);
 		this.solve();
 	}
 	
@@ -27,7 +27,7 @@ public class CPLEXTSP extends CPLEX{
 
 	@Override
 	protected void solve() {
-		SolutionTSP result = solveWithSubtourElimination(); 
+		SolutionTSP result = solveWithSubtourElimination(verbose); 
 		try {
 			problem.setCost(model.getObjValue());
 			endResolution();
@@ -39,9 +39,11 @@ public class CPLEXTSP extends CPLEX{
 			LinearProblem.setSol(result);
 	}
 	
-	private SolutionTSP solveWithSubtourElimination() {
+	private SolutionTSP solveWithSubtourElimination(boolean verbose) {
 		SolutionTSP result = new SolutionTSP(); 
 		try {
+			if(!verbose)
+				model.setOut(null);
 			find = model.solve();
 			result.setSol(castMatrixInInt());
 			if(result != null)

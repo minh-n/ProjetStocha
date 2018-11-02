@@ -79,7 +79,7 @@ public class GUI implements ActionListener, ChangeListener{
 		//TODO: set the correct values for the sliders
 		sliderTempCoef = new JSlider(0, 10, 9);
 		sliderAcceptRate = new JSlider(0, 10);
-		sliderIteNumber = new JSlider(0, 1000);
+		sliderIteNumber = new JSlider(0, 100);
 		
 	}
 
@@ -95,10 +95,10 @@ public class GUI implements ActionListener, ChangeListener{
 		//Main window frame, panel and menu
 		frame = new JFrame("TSP Solver");
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-	    frame.setPreferredSize(new Dimension(980, 755));
+	    frame.setPreferredSize(new Dimension(1200, 900));
 	    panel = new JPanel(new BorderLayout());
 		menu = new JPanel();
-		menu.setPreferredSize(new Dimension(300, 100));
+		menu.setPreferredSize(new Dimension(320, 180));
 		menu.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
 		menu.setLayout(new BoxLayout(menu, BoxLayout.Y_AXIS));
 		Dimension dim = new Dimension(300, 170);
@@ -193,21 +193,22 @@ public class GUI implements ActionListener, ChangeListener{
 		CplexOrAnnealingCombo.setMaximumSize(CplexOrAnnealingCombo.getPreferredSize() );
 		CplexOrAnnealingCombo.setEditable(true);
 		CplexOrAnnealingCombo.getEditor().getEditorComponent().addKeyListener(new KeyAdapter() {
-			public void keyReleased(KeyEvent e) {
-				String newText = (String) CplexOrAnnealingCombo.getEditor().getItem();
+		public void keyReleased(KeyEvent e) {
+			String newText = (String) CplexOrAnnealingCombo.getEditor().getItem();
 
-				DefaultComboBoxModel<String> newModel = new DefaultComboBoxModel<String>();
+			DefaultComboBoxModel<String> newModel = new DefaultComboBoxModel<String>();
 
-				for (String name : listCplexOrAnnealing) {
-					if (name.contains("" + newText)) {
-						newModel.addElement(name);
-					}
+			for (String name : listCplexOrAnnealing) {
+				if (name.contains("" + newText)) {
+					newModel.addElement(name);
 				}
-
-				CplexOrAnnealingCombo.setModel(newModel);
-				CplexOrAnnealingCombo.getEditor().setItem(newText);
-				CplexOrAnnealingCombo.setPopupVisible(true);
 			}
+
+			CplexOrAnnealingCombo.setModel(newModel);
+			CplexOrAnnealingCombo.getEditor().setItem(newText);
+			CplexOrAnnealingCombo.setPopupVisible(true);
+			}
+			
 		});
 		
 		JPanel wrapper = new JPanel();
@@ -215,13 +216,7 @@ public class GUI implements ActionListener, ChangeListener{
 		comboOptions.add( wrapper );
 		comboOptions.setMaximumSize(dim);
 
-		
-		
-		
-		
-		
-		
-		
+	
 		
 		// ********************************************************
 		// Sliders
@@ -252,8 +247,8 @@ public class GUI implements ActionListener, ChangeListener{
 		@SuppressWarnings("rawtypes")
 		Hashtable labelTable2 = new Hashtable();
 		labelTable2.put( new Integer( 0 ), new JLabel("0.0") );
-		labelTable2.put( new Integer( 500 ), new JLabel("500") );
-		labelTable2.put( new Integer( 1000 ), new JLabel("1000") );
+		labelTable2.put( new Integer( 50 ), new JLabel("500") );
+		labelTable2.put( new Integer( 100 ), new JLabel("1000") );
 		sliderIteNumber.setLabelTable( labelTable2 );
 
 		
@@ -283,7 +278,7 @@ public class GUI implements ActionListener, ChangeListener{
 		// Infos
 		
 		JPanel informations = new JPanel(new GridLayout(0, 1));
-		Border border3 = BorderFactory.createTitledBorder("Informations");
+		Border border3 = BorderFactory.createTitledBorder("Information");
 		informations.setBorder(new CompoundBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0), border3));
 
 
@@ -293,10 +288,12 @@ public class GUI implements ActionListener, ChangeListener{
 		initialTemp = new JLabel("The initial temperature is " + getInitTemp());
 		initialCost  = new JLabel("The initial cost of this route is " + getInitCost());
 		
+		informations.add(timeTaken);
+		informations.add(totalCost);
+		
 		informations.add(initialTemp);
 		informations.add(initialCost);
-		informations.add(totalCost);
-		informations.add(timeTaken);
+
 
 		informations.setMaximumSize(dim);
 
@@ -395,20 +392,61 @@ public class GUI implements ActionListener, ChangeListener{
         	{
             System.out.println("\nGUI: Starting computation!! Please wait...");
 			data.readInputFile(currentFilename, verbose);
-			
-			//TODO faire en fct du choix de l'utilisateur			
-			TSP problem = new TSP(data, false, false);
-			try {
-				CPLEXTSP solver = new CPLEXTSP(problem);
-				//solver.solve();
-				cost = problem.getCost();
-				setInitTemp(-1);
-				setInitCost(-1);
-			} catch (IloException e1) {
-				e1.printStackTrace();
-			}
-			
 			//data.displayMatrix();
+
+			
+			//Index 0 is CPLEX
+			if(CplexOrAnnealingCombo.getSelectedIndex() == 0)
+			{
+				System.out.println("                              \r\n" + 
+						"  ____ ____  _     _______  __\r\n" + 
+						" / ___|  _ \\| |   | ____\\ \\/ /\r\n" + 
+						"| |   | |_) | |   |  _|  \\  / \r\n" + 
+						"| |___|  __/| |___| |___ /  \\ \r\n" + 
+						" \\____|_|   |_____|_____/_/\\_\\\r\n" + 
+						"                              ");
+
+				
+				TSP problem = new TSP(data, false, false);
+				try {
+					CPLEXTSP solver = new CPLEXTSP(problem, false);
+					//solver.solve();
+					cost = problem.getCost();
+					setInitTemp(-1);
+					setInitCost(-1);
+				} catch (IloException e1) {
+					e1.printStackTrace();
+				}
+				
+			}
+			//Index 1 is the simulated annealing
+			else
+			{
+				System.out.println(" .----------------.  .----------------.  .----------------.  .----------------.  .----------------.  .----------------. \r\n" + 
+						"| .--------------. || .--------------. || .--------------. || .--------------. || .--------------. || .--------------. |\r\n" + 
+						"| |  _______     | || |  _________   | || |     ______   | || | _____  _____ | || |     _____    | || |  _________   | |\r\n" + 
+						"| | |_   __ \\    | || | |_   ___  |  | || |   .' ___  |  | || ||_   _||_   _|| || |    |_   _|   | || | |  _   _  |  | |\r\n" + 
+						"| |   | |__) |   | || |   | |_  \\_|  | || |  / .'   \\_|  | || |  | |    | |  | || |      | |     | || | |_/ | | \\_|  | |\r\n" + 
+						"| |   |  __ /    | || |   |  _|  _   | || |  | |         | || |  | '    ' |  | || |      | |     | || |     | |      | |\r\n" + 
+						"| |  _| |  \\ \\_  | || |  _| |___/ |  | || |  \\ `.___.'\\  | || |   \\ `--' /   | || |     _| |_    | || |    _| |_     | |\r\n" + 
+						"| | |____| |___| | || | |_________|  | || |   `._____.'  | || |    `.__.'    | || |    |_____|   | || |   |_____|    | |\r\n" + 
+						"| |              | || |              | || |              | || |              | || |              | || |              | |\r\n" + 
+						"| '--------------' || '--------------' || '--------------' || '--------------' || '--------------' || '--------------' |\r\n" + 
+						" '----------------'  '----------------'  '----------------'  '----------------'  '----------------'  '----------------' ");
+			
+			
+			
+			
+			
+			
+				setInitTemp(1);
+				setInitCost(1);
+			
+			
+			
+			}
+
+
 			//creating the panel in which the cities will be displayed
 			citiesPanel.getData(data);
 			
@@ -424,14 +462,14 @@ public class GUI implements ActionListener, ChangeListener{
 			
 			if(time > 1000){
 				time /= 1000;
-				timeTaken.setText("The time taken to compute is " + time + " seconds.");
+				timeTaken.setText("The time taken to compute is " + time + " s.");
 			}
 			else if(time > 60000){
 				time /= 60000;
-				timeTaken.setText("The time taken to compute is " + time + " minutes.");
+				timeTaken.setText("The time taken to compute is " + time + " mn.");
 			}
 			else{
-				timeTaken.setText("The time taken to compute is " + time + " milliseconds.");
+				timeTaken.setText("The time taken to compute is " + time + " ms.");
 			}
 			
 			if (initTemp == -1 && initCost == -1)
@@ -443,11 +481,11 @@ public class GUI implements ActionListener, ChangeListener{
 			else
 			{
 				initialTemp.setText("The initial temperature is " + getInitTemp());
-				initialCost.setText("The initial cost of this route is " + getInitCost());
+				initialCost.setText("The initial cost of this route is " + (int) Math.round(getInitCost()));
 				
 			}
 			
-			totalCost.setText("The total cost of this route is " + cost +".");
+			totalCost.setText("The total cost of this route is " +  Math.round((float)cost) +".");
 
 		
 			
