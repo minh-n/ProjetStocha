@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ClassDiagram>
+    <Class name="LinearProblem" x="68" y="76">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Association destinationClassName="Solution" endpointName="sol" kind="Simple"/>
+        <Association destinationClassName="Data" endpointName="data" kind="Simple"/>
+    </Class>
+    <Class name="Solver" x="372" y="258">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Association destinationClassName="LinearProblem"
+            endpointName="problem" kind="Simple"/>
+    </Class>
+    <Class name="CPLEX" x="322" y="352">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Extension destinationClassName="Solver"/>
+        <Communication destinationClassName="LinearProblem"/>
+    </Class>
+    <Class name="CPLEXTSP2.SubtourElimination" x="492" y="562">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Communication destinationClassName="CPLEXTSP2"/>
+    </Class>
+    <Class name="SimulatedAnnealingTSPD" x="218" y="714">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Extension destinationClassName="SimulatedAnnealing"/>
+        <Communication destinationClassName="DataTSP"/>
+        <Communication destinationClassName="SolutionTSP"/>
+        <Communication destinationClassName="SimulatedAnnealing"/>
+    </Class>
+    <Class name="Data" x="254" y="0">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+    </Class>
+    <Class name="City" x="458" y="76">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+    </Class>
+    <Class name="GUICitiesPanel" x="728" y="244">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Association destinationClassName="City"
+            endpointName="citiesPositionForDisplay" kind="Simple"/>
+        <Association destinationClassName="City"
+            endpointName="citiesPosition" kind="Simple"/>
+        <Communication destinationClassName="LinearProblem"/>
+        <Communication destinationClassName="DataTSP"/>
+        <Communication destinationClassName="City"/>
+        <Communication destinationClassName="SolutionTSP"/>
+    </Class>
+    <Class name="IterativeAlgorithmTSP" x="308" y="656">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Extension destinationClassName="IterativeAlgorithm"/>
+        <Association destinationClassName="CPLEXTSP" endpointName="algo" kind="Simple"/>
+        <Communication destinationClassName="SolutionTSP"/>
+    </Class>
+    <Class name="Manager" x="560" y="212">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Association destinationClassName="GUICitiesPanel"
+            endpointName="citiesPanel" kind="Simple"/>
+        <Communication destinationClassName="GUI"/>
+    </Class>
+    <Class name="CPLEXTSP2" x="468" y="492">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Extension destinationClassName="CPLEX"/>
+        <Communication destinationClassName="LinearProblem"/>
+        <Communication destinationClassName="CPLEX"/>
+        <Communication destinationClassName="DataTSP"/>
+        <Communication destinationClassName="SolutionTSP"/>
+    </Class>
+    <Class name="SolutionTSP" x="530" y="388">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Extension destinationClassName="Solution"/>
+    </Class>
+    <Class name="TSP" x="158" y="246">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Extension destinationClassName="LinearProblem"/>
+        <Communication destinationClassName="DataTSP"/>
+        <Communication destinationClassName="SolutionTSP"/>
+    </Class>
+    <Class name="CPLEXTSP" x="288" y="494">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Extension destinationClassName="CPLEX"/>
+        <Communication destinationClassName="LinearProblem"/>
+        <Communication destinationClassName="CPLEX"/>
+        <Communication destinationClassName="DataTSP"/>
+        <Communication destinationClassName="IterativeAlgorithmTSP"/>
+        <Communication destinationClassName="SolutionTSP"/>
+    </Class>
+    <Class name="DataTSP" x="258" y="120">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Extension destinationClassName="Data"/>
+    </Class>
+    <Class name="GUI" x="680" y="48">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Association destinationClassName="DataTSP" endpointName="data" kind="Simple"/>
+        <Association destinationClassName="GUICitiesPanel"
+            endpointName="citiesPanel" kind="Simple"/>
+        <Communication destinationClassName="LinearProblem"/>
+        <Communication destinationClassName="DataTSP"/>
+        <Communication destinationClassName="GUICitiesPanel"/>
+    </Class>
+    <Class name="SimulatedAnnealingTSPS" x="24" y="696">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Extension destinationClassName="SimulatedAnnealing"/>
+        <Communication destinationClassName="DataTSP"/>
+        <Communication destinationClassName="SolutionTSP"/>
+        <Communication destinationClassName="SimulatedAnnealing"/>
+    </Class>
+    <Class name="IterativeAlgorithm" x="318" y="584">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+    </Class>
+    <Class name="SimulatedAnnealing" x="50" y="398">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Association destinationClassName="Solution"
+            endpointName="currentSol" kind="Simple"/>
+        <Association destinationClassName="LinearProblem"
+            endpointName="pb" kind="Simple"/>
+    </Class>
+    <Class name="Solution" x="516" y="278">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+    </Class>
+</ClassDiagram>

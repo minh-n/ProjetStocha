@@ -388,6 +388,7 @@ public class GUI implements ActionListener, ChangeListener{
         
         if (e.getSource() == startButton) {
             
+           long startTime = System.currentTimeMillis();
 
 
         	if (currentFilename != null)
@@ -409,13 +410,23 @@ public class GUI implements ActionListener, ChangeListener{
 			//creating the panel in which the cities will be displayed
 			citiesPanel.getData(data);
 			
+			 long endTime = System.currentTimeMillis();
+		       
+			System.out.println("--GUI Debug: It took " + (endTime - startTime) + " milliseconds");
+			
 			//TODO link time and cost, initial temp and cost
-			time = 100.;
+			time = endTime - startTime;
 			cost = 9000.;
 			setInitTemp(999.);
 			setInitCost(8999.);
 			
-			timeTaken.setText("The time taken to compute is " + time);
+			if(time > 1000)
+			{
+				time /= 1000;
+				timeTaken.setText("The time taken to compute is " + time + " seconds.");
+
+			}
+			
 			totalCost.setText("The total cost of this route is " + cost);
 
 			initialTemp.setText("The initial temperature is " + getInitTemp());
@@ -423,6 +434,7 @@ public class GUI implements ActionListener, ChangeListener{
 			
 			citiesPanel.repaint();
 
+			
         	}
         	else
         	{
