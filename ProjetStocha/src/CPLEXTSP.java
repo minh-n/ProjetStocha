@@ -45,7 +45,7 @@ public class CPLEXTSP extends CPLEX{
 			find = model.solve();
 			result.setSol(castMatrixInInt());
 			if(result != null)
-				result = new IterativeAlgorithmTSP(this).loop();
+				result = new SubTourEliminationCPLEX(this).loop();
 		} catch (IloException e) {
 			e.printStackTrace();
 		}

@@ -101,7 +101,7 @@ public class GUI implements ActionListener, ChangeListener{
 		menu.setPreferredSize(new Dimension(300, 100));
 		menu.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
 		menu.setLayout(new BoxLayout(menu, BoxLayout.Y_AXIS));
-		Dimension dim = new Dimension(250, 150);
+		Dimension dim = new Dimension(300, 170);
 
         
         // ********************************************************
@@ -402,6 +402,8 @@ public class GUI implements ActionListener, ChangeListener{
 				CPLEXTSP solver = new CPLEXTSP(problem);
 				//solver.solve();
 				cost = problem.getCost();
+				setInitTemp(-1);
+				setInitCost(-1);
 			} catch (IloException e1) {
 				e1.printStackTrace();
 			}
@@ -416,21 +418,38 @@ public class GUI implements ActionListener, ChangeListener{
 			
 			//TODO link time and cost, initial temp and cost
 			time = endTime - startTime;
-			cost = 9000.;
-			setInitTemp(999.);
-			setInitCost(8999.);
+			//cost = 9000.;
+			//setInitTemp(999.);
+			//setInitCost(8999.);
 			
-			if(time > 1000)
-			{
+			if(time > 1000){
 				time /= 1000;
 				timeTaken.setText("The time taken to compute is " + time + " seconds.");
-
+			}
+			else if(time > 60000){
+				time /= 60000;
+				timeTaken.setText("The time taken to compute is " + time + " minutes.");
+			}
+			else{
+				timeTaken.setText("The time taken to compute is " + time + " milliseconds.");
 			}
 			
-			totalCost.setText("The total cost of this route is " + cost);
+			if (initTemp == -1 && initCost == -1)
+			{
+				initialTemp.setText("");
+				initialCost.setText("");
+				
+			}
+			else
+			{
+				initialTemp.setText("The initial temperature is " + getInitTemp());
+				initialCost.setText("The initial cost of this route is " + getInitCost());
+				
+			}
+			
+			totalCost.setText("The total cost of this route is " + cost +".");
 
-			initialTemp.setText("The initial temperature is " + getInitTemp());
-			initialCost.setText("The initial cost of this route is " + getInitCost());
+		
 			
 			citiesPanel.repaint();
 

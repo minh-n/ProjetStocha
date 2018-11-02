@@ -1,11 +1,11 @@
 import java.util.ArrayList;
 import ilog.concert.*;
 
-public class IterativeAlgorithmTSP extends IterativeAlgorithm
+public class SubTourEliminationCPLEX extends IterativeAlgorithm
 {
 	private CPLEXTSP algo;
 	
-	public IterativeAlgorithmTSP(CPLEXTSP algo) {
+	public SubTourEliminationCPLEX(CPLEXTSP algo) {
 		this.algo = algo; 
 	}
 
