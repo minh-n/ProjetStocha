@@ -27,6 +27,9 @@ public class DataTSP extends Data{
 	}
 	
 
+	/* (non-Javadoc)
+	 * @see Data#readInputFile(java.lang.String, boolean)
+	 */
 	public void readInputFile(String file, boolean verb)
 	{
 
@@ -163,6 +166,11 @@ public class DataTSP extends Data{
 		}
 
 
+	/**
+	 * Parse a TSP file with coordinates for each city
+	 * @param FILENAME the file's path
+	 * @return returns a list of the cities it contains
+	 */
 	public static List<City> parserTSP(String FILENAME){
 		
 		 List<City> listCity = new ArrayList<City>();
@@ -208,12 +216,20 @@ public class DataTSP extends Data{
 		return listCity;
 	}
 	
+	/**
+	 * removes every empty spaces from a string str
+	 * @param str the string we want to treat
+	 * @return the string str without any space
+	 */
 	private static String rmEmpty(String str){
 		while(str.charAt(0) == ' ')
 			str = str.substring(1);
 		return str;
 	}
 	
+	/**
+	 * Display the matrix of costs parsed from the XML file
+	 */
 	public void displayMatrix()
 	{
 		for(int i = 0; i< DataTSP.nbCity; i++)

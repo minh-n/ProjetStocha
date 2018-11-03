@@ -29,6 +29,18 @@ import org.omg.CosNaming.NamingContextExtPackage.AddressHelper;
 
 import ilog.concert.IloException;
 
+/**
+ * @author shipanda
+ *
+ */
+/**
+ * @author shipanda
+ *
+ */
+/**
+ * @author shipanda
+ *
+ */
 public class GUI implements ActionListener, ChangeListener{
 
 
@@ -94,6 +106,9 @@ public class GUI implements ActionListener, ChangeListener{
 	//**************************************FRAME**************************************//
 	
 	
+	/**
+	 *  Main function for the GUI. Contains every elements, Jpanels, buttons...
+	 */
 	@SuppressWarnings("unchecked")
 	public void createNewJFrame() {
 
@@ -195,8 +210,10 @@ public class GUI implements ActionListener, ChangeListener{
 		// CPLEX OU ANNEALING
 		final ArrayList<String> listCplexOrAnnealing = new ArrayList<String>();
 		Collections.sort(listCplexOrAnnealing);
-		listCplexOrAnnealing.add(0, "Simulated Annealing");
-		listCplexOrAnnealing.add(0, "CPLEX");
+		listCplexOrAnnealing.add("CPLEX");
+		listCplexOrAnnealing.add("Simulated Annealing");
+		listCplexOrAnnealing.add("No solving");
+
 		DefaultComboBoxModel<String> modelBoxCplexOrAnnealing = new DefaultComboBoxModel<String>();
 		for (String str : listCplexOrAnnealing) {
 			modelBoxCplexOrAnnealing.addElement(str);
@@ -263,19 +280,6 @@ public class GUI implements ActionListener, ChangeListener{
 		labelTable2.put( new Integer( 50 ), new JLabel("500") );
 		labelTable2.put( new Integer( 100 ), new JLabel("1000") );
 		sliderIteNumber.setLabelTable( labelTable2 );
-
-		
-        // Add change listener to the slider
-//		sliderIteNumber.addChangeListener(new ChangeListener() {
-//
-//            public void stateChanged(ChangeEvent e) {
-//
-//                status.setText("Value of the slider is: " + ((JSlider)e.getSource()).getValue());
-//
-//            }
-//
-//        });
-
 		
 		sliders.add(new JLabel("Temperature coefficient: "));
 		sliders.add(sliderTempCoef);
@@ -306,11 +310,8 @@ public class GUI implements ActionListener, ChangeListener{
 		
 		informations.add(initialTemp);
 		informations.add(initialCost);
-
-
 		informations.setMaximumSize(dim);
 
-		
 		
 		// ********************************************************
 		// Panel et menu generaux
@@ -345,7 +346,10 @@ public class GUI implements ActionListener, ChangeListener{
 		frame.setVisible(true);
 	}
 	
-    /** Listen to the slider. */
+  
+    /* (non-Javadoc)
+     * @see javax.swing.event.ChangeListener#stateChanged(javax.swing.event.ChangeEvent)
+     */
     public void stateChanged(ChangeEvent e) {
         JSlider source = (JSlider)e.getSource();
         if (!source.getValueIsAdjusting()) {
@@ -373,23 +377,10 @@ public class GUI implements ActionListener, ChangeListener{
             
         }
     }
-   
-    /*Listens to the check boxes. */
-//    public void itemStateChanged(ItemEvent e) {
-//            Object source = e.getItemSelectable();
-//   
-//            if (source == checkGetTSP) {
-//                System.out.println("C'est TSP !!!!!!!!!!!!!!!!!!!");
-//            }
-//
-//            if (e.getStateChange() == ItemEvent.DESELECTED) {
-//                System.out.println("Bail deselect");
-// 
-//            
-//    }
-//
-//    }
     
+    /* (non-Javadoc)
+     * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+     */
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == checkGetTSP) {
            if(getTSP)
@@ -459,7 +450,7 @@ public class GUI implements ActionListener, ChangeListener{
 				
 			}
 			//Index 1 is the simulated annealing
-			else
+			else if (CplexOrAnnealingCombo.getSelectedIndex() == 1)
 			{
 				System.out.println(" .----------------.  .----------------.  .----------------.  .----------------.  .----------------.  .----------------. \r\n" + 
 						"| .--------------. || .--------------. || .--------------. || .--------------. || .--------------. || .--------------. |\r\n" + 
@@ -483,6 +474,12 @@ public class GUI implements ActionListener, ChangeListener{
 			
 			
 			
+			}
+			else
+			{
+				System.out.println("No solving! Only displaying.");
+				setInitTemp(-1);
+				setInitCost(-1);
 			}
 
 

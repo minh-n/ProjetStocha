@@ -73,6 +73,10 @@ public class GUICitiesPanel extends JPanel implements MouseMotionListener, Compo
 		
 	}
 	
+	/**
+	 * Paint the paths between the cities, using Graphics2D g from PaintComponent
+	 * @param g Graphics2D element, created in PaintComponent
+	 */
 	public void paintPath(Graphics2D g) {
 		System.out.println("\n--GUICitiesPanel: painting the paths.");
 		g.setColor(Color.BLACK); 
@@ -88,7 +92,7 @@ public class GUICitiesPanel extends JPanel implements MouseMotionListener, Compo
 						//System.out.println("Debug: Link found between city " + i + " and " + j +".");
 						City c1 = citiesPositionForDisplay.get(i);
 						City c2 = citiesPositionForDisplay.get(j);
-						System.out.println(c1 + " LINKED TO " + c2);
+						//System.out.println(c1 + " LINKED TO " + c2);
 	                    Shape l = new Line2D.Double(c1.getX()+2, c1.getY()+2, c2.getX()+2, c2.getY()+2);
 	                    g.draw(l);
 	      
@@ -100,6 +104,9 @@ public class GUICitiesPanel extends JPanel implements MouseMotionListener, Compo
 
 	}
 
+	/**
+	 * Compute the cities position according to the min and max found earlier
+	 */
 	public void setCitiesPositionForDisplay() {
 		citiesPositionForDisplay.clear();
 
@@ -118,6 +125,9 @@ public class GUICitiesPanel extends JPanel implements MouseMotionListener, Compo
 		}
 	}
 
+	/**
+	 * Compute the limits in terms of pixels, from the window size and from the mix nad max city positions
+	 */
 	public void setWindowBorders() {
 
 		System.out.println("\n--GUICitiesPanel: setting window borders.");
@@ -160,6 +170,9 @@ public class GUICitiesPanel extends JPanel implements MouseMotionListener, Compo
 		// System.out.println("\nDebug: GUICitiesPanel: Window border " + windowSize);
 	}
 
+	/* (non-Javadoc)
+	 * @see javax.swing.JComponent#paintComponent(java.awt.Graphics)
+	 */
 	@Override
 	public void paintComponent(Graphics graphics) {
 
@@ -182,11 +195,13 @@ public class GUICitiesPanel extends JPanel implements MouseMotionListener, Compo
 			g.fillRect((int) c.getX(), (int) c.getY(), 4, 4);
 
 		}
-
-		this.paintPath(g);//will do later
-		
+		this.paintPath(g);
 	}
 
+	/**
+	 * Compute the position of each cities, using its cost to the other cities
+	 * @param test True if we want to test the quality of the result (calculated distances vs true coordinates
+	 */
 	public void getPositionsFromCost(boolean test) {
 
 		int id = 0;
@@ -273,6 +288,9 @@ public class GUICitiesPanel extends JPanel implements MouseMotionListener, Compo
 		this.windowSize = windowSize;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.awt.event.ComponentListener#componentResized(java.awt.event.ComponentEvent)
+	 */
 	@Override
 	public void componentResized(ComponentEvent arg0) {
 		//on resize, compute the new coordinates with the new window size
