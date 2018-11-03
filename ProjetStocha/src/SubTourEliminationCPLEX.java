@@ -73,6 +73,8 @@ public class SubTourEliminationCPLEX extends IterativeAlgorithm
 					break;
 				}
 			}
+			if(lap.size() != i+1)
+				lap.put(i, -1);
 		}
 		return lap;
 	}
@@ -93,7 +95,7 @@ public class SubTourEliminationCPLEX extends IterativeAlgorithm
 				tour.add(actualCity);
 				cities.remove(actualCity);
 				nextCity = lap.get(actualCity);
-				if(!firstCity.equals(nextCity))
+				if(!firstCity.equals(nextCity) && nextCity.intValue() != -1)
 					actualCity = nextCity;
 				else {
 					subtour.add(tour);
