@@ -392,6 +392,7 @@ public class GUI implements ActionListener, ChangeListener{
         	{
             System.out.println("\nGUI: Starting computation!! Please wait...");
 			data.readInputFile(currentFilename, verbose);
+
 			//data.displayMatrix();
 
 			
@@ -410,7 +411,7 @@ public class GUI implements ActionListener, ChangeListener{
 				TSP problem = new TSP(data, false, false);
 				try {
 					CPLEXTSP solver = new CPLEXTSP(problem, false);
-					//solver.solve();
+					solver.solve();
 					cost = problem.getCost();
 					setInitTemp(-1);
 					setInitCost(-1);

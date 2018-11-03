@@ -5,49 +5,32 @@ public class CPLEXTSP extends CPLEX{
 
 	public CPLEXTSP(LinearProblem problem, boolean verbose) throws IloException {
 		super(problem, verbose);
-		this.solve();
-	}
-	
-	protected int[][] castMatrixInInt() throws IloException {
-		if(find) {
-			int nbCities = ((DataTSP)problem.getData()).getNbCity();
-			int[][] solution = new int[nbCities][nbCities];
-			for(int i = 0; i < nbCities; i++) {
-				for(int j = 0; j < nbCities; j++) {
-					if(j != i)
-						solution[i][j] = (int) model.getValue(matrixSolution[i][j]);
-					else
-						solution[i][j] = 0;
-				}
-			}
-			return solution;
-		}
-		return null;
 	}
 
 	@Override
 	protected void solve() {
 		SolutionTSP result = solveWithSubtourElimination(verbose); 
 		try {
-			problem.setCost(model.getObjValue());
+			if(find) {
+				problem.setCost(model.getObjValue());
+				LinearProblem.setSol(result);
+			}
 			endResolution();
 		} catch (IloException e) {
 			e.printStackTrace();
 		}
-		//TODO else
-		if(result != null)
-			LinearProblem.setSol(result);
 	}
 	
 	private SolutionTSP solveWithSubtourElimination(boolean verbose) {
 		SolutionTSP result = new SolutionTSP(); 
 		try {
-			if(!verbose)
+			if(!verbose) {
 				model.setOut(null);
-			find = model.solve();
-			result.setSol(castMatrixInInt());
-			if(result != null)
-				result = new SubTourEliminationCPLEX(this).loop();
+				model.setWarning(null);
+			}
+			this.setFind(model.solve());
+			result = castMatrixToSolution();
+			result = new SubTourEliminationCPLEX(this).loop();
 		} catch (IloException e) {
 			e.printStackTrace();
 		}
@@ -97,6 +80,24 @@ public class CPLEXTSP extends CPLEX{
 			}
 			model.addEq(constraint1b, 1.0);
 		}
+	}
+
+	@Override
+	protected SolutionTSP castMatrixToSolution() throws IloException {
+		if(find) {
+			int nbCities = ((DataTSP)problem.getData()).getNbCity();
+			int[][] solution = new int[nbCities][nbCities];
+			for(int i = 0; i < nbCities; i++) {
+				for(int j = 0; j < nbCities; j++) {
+					if(j != i)
+						solution[i][j] = (int) model.getValue(matrixSolution[i][j]);
+					else
+						solution[i][j] = 0;
+				}
+			}
+			return new SolutionTSP(solution);
+		}
+		return null;
 	}
 	
 	public IloNumVar[][] getMatrixSolution() {

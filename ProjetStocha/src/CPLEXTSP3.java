@@ -8,7 +8,6 @@ public class CPLEXTSP3 extends CPLEX{
 
 	public CPLEXTSP3(LinearProblem problem, boolean verbose) throws IloException {
 		super(problem, verbose);
-		this.solve();
 	}
 
 	@Override
@@ -18,7 +17,7 @@ public class CPLEXTSP3 extends CPLEX{
 			if(!verbose)
 				model.setOut(null);
 			model.solve();
-			result.setSol(castMatrixInInt());
+			result = castMatrixToSolution();
 			problem.setCost(model.getObjValue());
 			LinearProblem.setSol(result);
 			endResolution();
@@ -85,17 +84,21 @@ public class CPLEXTSP3 extends CPLEX{
 		}
 	}
 	
-	protected int[][] castMatrixInInt() throws IloException {
-		int nbCities = ((DataTSP)problem.getData()).getNbCity();
-		int[][] solution = new int[nbCities][nbCities];
-		for(int i = 0; i < nbCities; i++) {
-			for(int j = 0; j < nbCities; j++) {
-				if(j != i)
-					solution[i][j] = (int) model.getValue(matrixSolution[i][j]);
-				else
-					solution[i][j] = 0;
+	@Override
+	protected SolutionTSP castMatrixToSolution() throws IloException {
+		if(find) {
+			int nbCities = ((DataTSP)problem.getData()).getNbCity();
+			int[][] solution = new int[nbCities][nbCities];
+			for(int i = 0; i < nbCities; i++) {
+				for(int j = 0; j < nbCities; j++) {
+					if(j != i)
+						solution[i][j] = (int) model.getValue(matrixSolution[i][j]);
+					else
+						solution[i][j] = 0;
+				}
 			}
+			return new SolutionTSP(solution);
 		}
-		return solution;
+		return null;
 	}
 }
