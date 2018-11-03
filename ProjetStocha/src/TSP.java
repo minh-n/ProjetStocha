@@ -19,15 +19,15 @@ public class TSP extends LinearProblem{
 		
 	}
 	
-	public double objectiveFunction()
+	public double objectiveFunction(Solution sol)
 	{
+		SolutionTSP solTSP = (SolutionTSP)sol;
+		int track[] = ((SolutionTSP)sol).getTrack();
 		double cost = 0;
+		
 		for (int i = 0 ; i < ((DataTSP)this.data).getNbCity() ; i++)
 		{
-			for (int j = 0 ; j < ((DataTSP)this.data).getNbCity() ; j++)
-			{
-				cost += ((DataTSP)this.data).getMatrixCost()[i][j]*((SolutionTSP)this.sol).getSol()[i][j];
-			}
+			cost += ((DataTSP)this.data).getMatrixCost()[track[i]][solTSP.nextCity(track[i])];
 		}
 		
 		return cost;

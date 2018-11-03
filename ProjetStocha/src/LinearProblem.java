@@ -1,6 +1,3 @@
-import java.util.ArrayList;
-
-
 public abstract class LinearProblem
 {
 	//----------ATTRIBUTES-------------------
@@ -8,15 +5,20 @@ public abstract class LinearProblem
 	protected Data data;
 	//max is true
 	protected boolean maxMin;
-	//TODO trouver un type qui a du sens
 	protected double matConstraints[][];
 	protected double secondMembre[];
 	
-	protected static Solution sol;
+	public static Solution sol;
 	protected double cost;
-	
-	//----------CONST GET SET------------------
 
+	//----------CONST GET SET------------------
+	
+	/**
+	 * @param data : class containing the data read from the file
+	 * @param maxmin : true if it's a maximisation problem
+	 * @param matConstraints
+	 * @param secondMembre
+	 */
 	public LinearProblem(DataTSP data, boolean maxmin, double matConstraints[][], double secondMembre[])
 	{
 		this.data = data;
@@ -25,12 +27,17 @@ public abstract class LinearProblem
 		this.secondMembre = secondMembre;
 	}
 	
-	//in case you don't want to use matConstraints and secondMembre
+
+	/**
+	 * @param data : class containing the data read from the file
+	 * @param maxmin : true if it's a maximisation problem
+	 */
 	public LinearProblem(DataTSP data, boolean maxmin)
 	{
 		this.data = data;
 		this.maxMin = maxmin;
 	}
+	
 	
 	public Data getData()
 	{
@@ -57,20 +64,28 @@ public abstract class LinearProblem
 		return sol;
 	}
 	
-	public static void setSol(Solution sol) {
-		LinearProblem.sol = sol;
+	public static void setSol(Solution ssol)
+	{
+		sol = ssol;
 	}
 	
-	public double getCost() {
-		return cost;
+	public Double getCost()
+	{
+		return this.cost;
 	}
-
-	public void setCost(double cost) {
+	
+	public void setCost(double cost)
+	{
 		this.cost = cost;
 	}
 	
 	//--------------METHODS------------------
 	
-	public abstract double objectiveFunction();
+	
+	/**
+	 * @param sol
+	 * @return the cost of the given solution
+	 */
+	public abstract double objectiveFunction(Solution sol);
 	
 }

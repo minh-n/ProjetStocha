@@ -1,243 +1,279 @@
+import java.util.Arrays;
+import java.util.ArrayList;
+
 public class SimulatedAnnealingTSPD extends SimulatedAnnealing{
 	
 	//k comme k-opt
 	private int k;
-	
+	private double coefTemp;
 	
 	//-------- CONST SET GET --------------------
 	
-	public SimulatedAnnealingTSPD(LinearProblem pb, int nbIteration, int nbPalierMax, int k)
+	
+	/**
+	 * @param k : will decide which k-opt to use (currently, it can be 2, 3 or 4)
+	 */
+	public SimulatedAnnealingTSPD(LinearProblem pb, int nbIteration, int failureThreshold, double acceptationThreshold, int k, double coefTemp)
 	{
 		
-		super(pb, nbIteration, nbPalierMax);
+		super(pb, nbIteration, failureThreshold, acceptationThreshold);
 		this.k = k;
+		this.coefTemp = coefTemp;
 		
 	}
 	
 	
 	
 	//------------- METHODS -----------------------
-	
-	//KirkPatrick
+
+	/* (non-Javadoc)
+	 * @see SimulatedAnnealing#initTemp()
+	 * We chose to implement the KirkPatrick algorithm
+	 * to set an initial temperature
+	 */
 	public void initTemp ()
 	{
 		//TODO ptetre changer cette valeur
-		int init = 10;
+		this.currentTemperature = 10;
 		do
 		{
+			//System.out.println(this.acceptationRate);
 			processTier();
-			init *= 2;
+			this.currentTemperature *= 2;
 		}while (this.acceptationRate < 0.8);
 		
 		
 		if (this.acceptationRate > 0.95)
-			init /= 2;
+			this.currentTemperature /= 2;
 		
-		this.initialTemperature = init;
+		this.initialTemperature = this.currentTemperature;
+	}
+	
+	
+	/* (non-Javadoc)
+	 * @see SimulatedAnnealing#changeTemp()
+	 */
+	public void changeTemp()
+	{
+		this.currentTemperature *= coefTemp;
+	}
+	
+	public void changeTemp(double val)
+	{
+		this.currentTemperature = val;
 	}
 	
 	
 	
-	//K-OPT
+	/* (non-Javadoc)
+	 * @see SimulatedAnnealing#initSol()
+	 * Here was implemented the algorithm of the
+	 * nearest neighbor
+	 */
+	public SolutionTSP initSol()
+	{
+		/*
+		// VILLE 1 PUIS VILLE 2 PUIS VILLE 3 ETC...
+		SolutionTSP sol = new SolutionTSP();
+		int nbCity = ((DataTSP)this.pb.getData()).getNbCity();
+		int track[] = new int[nbCity];
+		
+		for (int i=0 ; i<nbCity ; i++)
+			track[i] = i;
+		
+		sol.setTrack(track);
+		sol.setAssociatedValue(this.pb.objectiveFunction(sol));
+		
+		return sol;*/
+		
+		//PLUS PROCHE VOISIN
+		SolutionTSP sol = new SolutionTSP();
+		int nbCity = ((DataTSP)this.pb.getData()).getNbCity();
+		int solVal[] = new int[nbCity];
+		ArrayList<Integer> track = new ArrayList<Integer>();
+		double lowestCost = 10000000;
+		int idxLowest = -1;
+		
+		track.add(0);
+		solVal[0] = 0;
+		
+		double matCost[][] = ((DataTSP)this.pb.getData()).getMatrixCost();
+		
+		for (int i=0 ; i<nbCity-1 ; i++)
+		{
+			lowestCost = 1000000;
+			idxLowest = -1;
+			for (int j=0 ; j<nbCity ; j++)
+			{
+				if (!track.contains(j) & (matCost[track.get(i)][j] < lowestCost))
+				{
+					lowestCost = matCost[track.get(i)][j];
+					idxLowest = j;
+				}
+			}
+			
+			track.add(idxLowest);
+			solVal[i+1] = idxLowest;
+			
+		}
+		
+		sol.setTrack(solVal);
+		sol.setAssociatedValue(this.pb.objectiveFunction(sol));
+		initCost = sol.getAssociatedValue();
+
+		return sol;
+
+	}
+	
+	
+	
+	/* (non-Javadoc)
+	 * @see SimulatedAnnealing#generateNeighbor()
+	 */
 	public SolutionTSP generateNeighbor()
 	{
+		SolutionTSP neighbor;
 		switch (this.k)
 		{
 			case 3 :
-				return opt3();
+				neighbor = opt3();
 			case 4 :
-				return opt4();
+				neighbor = opt4();
 			default:
-				return opt2();
+				neighbor = opt2();
 		}
-				
+			
+		neighbor.setAssociatedValue(this.pb.objectiveFunction(neighbor));
+		return neighbor;
+		
 	}
 	
 	
-	//chemin initial : ville 1 puuis ville 2 puis ville 3 etc...
-	public void initSol()
-	{
-		SolutionTSP sol = new SolutionTSP();
-		int nbCity = ((DataTSP)this.pb.getData()).getNbCity();
-		int solMat[][] = new int[nbCity][nbCity];
-		
-		for (int i= 0 ; i<nbCity ; i++)
-		{
-			for (int j= 0 ; j<nbCity ; j++)
-			{
-				if (i+1 == nbCity && j == 0)
-					solMat[i][j] = 1;
-				
-				else
-				{
-					if (j == i+1 && i+1 < nbCity)
-						solMat[i][j] = 1;
-				
-					else
-						solMat[i][j] = 0;
-				}
-			}
-		}
-		
-		sol.setSol(solMat);
-		
-		this.currentSol = sol;
-	}
 	
-	
+	/**
+	 * @return : returns a new SolutionTSP found via a 2-opt exchange
+	 */
 	public SolutionTSP opt2()
 	{
-		//TODO GOFAIRE
-		return new SolutionTSP();
+		SolutionTSP neighbor = ((SolutionTSP)this.currentSol).cloneSol();
+		
+		int nbCity = ((DataTSP)this.pb.getData()).getNbCity();
+		int city1, city2;
+		
+		city1 = (int)(Math.random()*(nbCity));
+		do
+		{
+			city2 = (int)(Math.random()*(nbCity));
+		}while(city2 == city1);
+		
+		//on change le sens de parcours d'une partie du chemin
+		neighbor.reverseTrack(city1, city2);
+	
+		//et on fait notre raccord croie
+		
+		return neighbor;
 	}
 	
+	/**
+	 * @return : returns a new SolutionTSP found via a 3-opt exchange
+	 */
 	public SolutionTSP opt3()
 	{
-		SolutionTSP neighbor = new SolutionTSP(((SolutionTSP)this.currentSol).getSol());
-		boolean newval = true;
-		int changes[] = new int[3];
-		int destChanges[] = new int[3];
-		int nbCity = ((DataTSP)this.pb.getData()).getNbCity();
-		
-		for (int i = 0 ; i<3 ; i++)
-		{
-			newval = true;
-			do
-			{
-				//on choisi une ville
-				changes[i] = (int)Math.random()*(nbCity-1);
-				//on rechoisis si elle existe deja dans les villes choisies
-				for (int j = 0 ; j<i ; j++)
-				{
-					if (changes[i] == changes[j])
-					{
-						newval = false;
-						break;
-					}
-						
-				}
-			}while (newval == false);
-			
-		}
-		
-		//on récupère le lien partant de chacune des villes choisies
-		for (int i= 0 ; i<3 ; i++)
-		{
-			for (int j= 0 ; j<nbCity ; j++)
-			{
-				if (neighbor.getSol()[changes[i]][j] == 1)
-				{
-					//on l'enregistre dans un truc tampon
-					destChanges[i] = j;
-					//on le supprime de la solution
-					neighbor.getSol()[changes[i]][j] = 0;
-				}
-			}
-		}
-	
-		for (int i= 0 ; i<3 ; i++)
-		{
-			if (i+1 == 3)
-				neighbor.getSol()[changes[i]][destChanges[0]] = 1;
-			else
-				neighbor.getSol()[changes[i]][destChanges[i+1]] = 1;
-		}
+		SolutionTSP neighbor = ((SolutionTSP)this.currentSol).cloneSol();
+		int track[] = neighbor.getTrack();
+		ArrayList<Integer> subtrack1 = new ArrayList<Integer>();
+		ArrayList<Integer> subtrack2 = new ArrayList<Integer>();
 
+		int nbCity = ((DataTSP)this.pb.getData()).getNbCity();
+		int cities[] = new int[3];
+		int idx;
+		
+		cities[0] = (int)(Math.random()*(nbCity));
+		
+		do
+		{
+			cities[1] = (int)(Math.random()*(nbCity));
+		}while(cities[1] == cities[0]);
+		
+		do
+		{
+			cities[2] = (int)(Math.random()*(nbCity));
+		}while(cities[2] == cities[0] | cities[2] == cities[1]);
+		
+		Arrays.sort(cities);
+		for (idx = cities[0]+1 ; idx <= cities[1] ; idx++)
+			subtrack1.add(track[idx]);
+		
+		for (idx = cities[1]+1 ; idx <= cities[2] ; idx++)
+			subtrack2.add(track[idx]);
+		
+		subtrack2.addAll(subtrack1);
+		
+		idx = cities[0]+1;
+		while (subtrack2.size() != 0)
+		{
+			track[idx] = subtrack2.get(0);
+			subtrack2.remove(0);
+			idx++;
+		}	
+		
 		return neighbor;
 	}
 	
+	/**
+	 * @return : returns a new SolutionTSP found via a 3-opt exchange
+	 */
 	public SolutionTSP opt4()
 	{
-		SolutionTSP neighbor = new SolutionTSP(((SolutionTSP)this.currentSol).getSol());
-		boolean newval = true;
-		int changes[] = new int[4];
-		int destChanges[] = new int[4];
-		int nbCity = ((DataTSP)this.pb.getData()).getNbCity();
-		
-		for (int i = 0 ; i<4 ; i++)
-		{
-			newval = true;
-			do
-			{
-				//on choisi une ville
-				changes[i] = (int)Math.random()*(nbCity-1);
-				//on rechoisis si elle existe deja dans les villes choisies
-				for (int j = 0 ; j<i ; j++)
-				{
-					if (changes[i] == changes[j])
-					{
-						newval = false;
-						break;
-					}
-						
-				}
-			}while (newval == false);
-			
-		}
-		
-		//on récupère le lien partant de chacune des villes choisies
-		for (int i= 0 ; i<4 ; i++)
-		{
-			for (int j= 0 ; j<nbCity ; j++)
-			{
-				if (neighbor.getSol()[changes[i]][j] == 1)
-				{
-					//on l'enregistre dans un truc tampon
-					destChanges[i] = j;
-					//on le supprime de la solution
-					neighbor.getSol()[changes[i]][j] = 0;
-				}
-			}
-		}
-	
-		for (int i= 0 ; i<4 ; i++)
-		{
-			if (i+1 == 4)
-				neighbor.getSol()[changes[i]][destChanges[1]] = 1;
-			else if (i+2 == 4)
-				neighbor.getSol()[changes[i]][destChanges[0]] = 1;
-			else
-				neighbor.getSol()[changes[i]][destChanges[i+2]] = 1;
-		}
+		SolutionTSP neighbor = ((SolutionTSP)this.currentSol).cloneSol();
+		int track[] = neighbor.getTrack();
+		ArrayList<Integer> subtrack1 = new ArrayList<Integer>();
+		ArrayList<Integer> subtrack2 = new ArrayList<Integer>();
+		ArrayList<Integer> subtrack3 = new ArrayList<Integer>();
 
+		int nbCity = ((DataTSP)this.pb.getData()).getNbCity();
+		int cities[] = new int[4];
+		int idx;
+		
+		cities[0] = (int)(Math.random()*(nbCity));
+		
+		do
+		{
+			cities[1] = (int)(Math.random()*(nbCity));
+		}while(cities[1] == cities[0]);
+		
+		do
+		{
+			cities[2] = (int)(Math.random()*(nbCity));
+		}while(cities[2] == cities[0] | cities[2] == cities[1]);
+		
+		do
+		{
+			cities[3] = (int)(Math.random()*(nbCity));
+		}while(cities[3] == cities[0] | cities[3] == cities[1] | cities[3] == cities[2]);
+		
+		Arrays.sort(cities);
+		for (idx = cities[0]+1 ; idx <= cities[1] ; idx++)
+			subtrack1.add(track[idx]);
+		
+		for (idx = cities[1]+1 ; idx <= cities[2] ; idx++)
+			subtrack2.add(track[idx]);
+		
+		for (idx = cities[2]+1 ; idx <= cities[3] ; idx++)
+			subtrack3.add(track[idx]);
+		
+		subtrack3.addAll(subtrack2);
+		subtrack3.addAll(subtrack1);
+		
+		idx = cities[0]+1;
+		while (subtrack3.size() != 0)
+		{
+			track[idx] = subtrack3.get(0);
+			subtrack3.remove(0);
+			idx++;
+		}	
+		
 		return neighbor;
 	}
-	
-	
-	//NE PAS OUBLIER DE RACCORDER CE CHEMIN INVERSé AVEC LE RESTE DU TOUT
-	//car en fin de fonction, city1 ne va nulle part, et rien ne se dirige vers city2.
-	public void reverseTrack(int city1, int city2)
-	{
-		int nbCity = ((DataTSP)this.pb.getData()).getNbCity();
-		
-		//-1 n'a aucune importance
-		int temp = -1;
-		int currentCity = city1;
-		
-		while (temp != city2)
-		{
-			
-			for (int i=0 ; i<nbCity ; i++)
-			{
-				if (((SolutionTSP)this.currentSol).getSol()[currentCity][i] == 1)
-				{
-					((SolutionTSP)this.currentSol).getSol()[currentCity][i] = 0;
-						
-					if (currentCity != city1)
-						((SolutionTSP)this.currentSol).getSol()[currentCity][temp] = 1;
-					temp = currentCity;
-					currentCity = i;
-					break;
-				}
-				
-				if (i+1 == nbCity)
-					System.out.println("ERROR : no track found");
-			}
-			
-		}
-	}
-	
-	
-	
 	
 }

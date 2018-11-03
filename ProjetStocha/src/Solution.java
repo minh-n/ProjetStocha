@@ -8,7 +8,7 @@ public abstract class Solution {
 	
 	public Solution(){}
 	
-	public void setAssociatedVlue(double val)
+	public void setAssociatedValue(double val)
 	{
 		this.associatedValue = val;
 	}
@@ -21,6 +21,6 @@ public abstract class Solution {
 	
 	protected abstract void displaySolution();
 	
-	public abstract Solution cloneSol();
+	//public abstract Solution cloneSol();
 	
 }
