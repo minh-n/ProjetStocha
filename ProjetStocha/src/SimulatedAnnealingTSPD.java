@@ -6,20 +6,21 @@ public class SimulatedAnnealingTSPD extends SimulatedAnnealing{
 	//k comme k-opt
 	private int k;
 	private double coefTemp;
-	
+	private int initTempCoef;
 	//-------- CONST SET GET --------------------
 	
 	
 	/**
 	 * @param k : will decide which k-opt to use (currently, it can be 2, 3 or 4)
 	 */
-	public SimulatedAnnealingTSPD(LinearProblem pb, int nbIteration, int failureThreshold, double acceptationThreshold, int k, double coefTemp)
+	public SimulatedAnnealingTSPD(LinearProblem pb, int nbIteration, int failureThreshold, double acceptationThreshold, int k, double coefTemp, int initTempCoef)
 	{
 		
 		super(pb, nbIteration, failureThreshold, acceptationThreshold);
 		this.k = k;
 		this.coefTemp = coefTemp;
-		
+		this.initTempCoef = initTempCoef;
+
 	}
 	
 	
@@ -46,7 +47,7 @@ public class SimulatedAnnealingTSPD extends SimulatedAnnealing{
 		if (this.acceptationRate > 0.95)
 			this.currentTemperature /= 2;
 		
-		this.initialTemperature = this.currentTemperature;
+		this.initialTemperature = this.currentTemperature*initTempCoef;
 	}
 	
 	
@@ -83,7 +84,8 @@ public class SimulatedAnnealingTSPD extends SimulatedAnnealing{
 		
 		sol.setTrack(track);
 		sol.setAssociatedValue(this.pb.objectiveFunction(sol));
-		
+		initCost = sol.getAssociatedValue();
+
 		return sol;*/
 		
 		//PLUS PROCHE VOISIN

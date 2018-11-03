@@ -56,6 +56,7 @@ public class GUI implements ActionListener, ChangeListener{
 	private static JSlider sliderTempCoef;
 	private static JSlider sliderAcceptRate;
 	private static JSlider sliderFailureThreshold;
+	private static JSlider sliderInitTemp;
 
 	
 	//infos
@@ -92,7 +93,8 @@ public class GUI implements ActionListener, ChangeListener{
 		sliderTempCoef = new JSlider(950, 999, 990);
 		sliderAcceptRate = new JSlider(1, 100, 10);
 		sliderFailureThreshold = new JSlider(1, 100, 20);
-		
+		sliderInitTemp = new JSlider(1, 10, 1);
+
 	}
 
 	
@@ -249,16 +251,16 @@ public class GUI implements ActionListener, ChangeListener{
 		Border border6 = BorderFactory.createTitledBorder("Annealing parameters");
 		sliders.setBorder(new CompoundBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0), border6));
 
-
-		 
 		sliderTempCoef.setPaintLabels(true);
 		sliderAcceptRate.setPaintLabels(true);
 		sliderFailureThreshold.setPaintLabels(true);
-		
+		sliderInitTemp.setPaintLabels(true);
+
 		sliderFailureThreshold.addChangeListener(this);
 		sliderAcceptRate.addChangeListener(this);
 		sliderTempCoef.addChangeListener(this);
-		
+		sliderInitTemp.addChangeListener(this);
+
 		@SuppressWarnings("rawtypes")
 		Hashtable labelTableTemp = new Hashtable();
 		labelTableTemp.put( new Integer( 950 ), new JLabel("0.950") );
@@ -280,6 +282,13 @@ public class GUI implements ActionListener, ChangeListener{
 		labelTable2.put( new Integer( 100 ), new JLabel("100") );
 		sliderFailureThreshold.setLabelTable( labelTable2 );
 		
+		@SuppressWarnings("rawtypes")
+		Hashtable labelTableInit = new Hashtable();
+		labelTableInit.put( new Integer( 1 ), new JLabel("1") );
+		labelTableInit.put( new Integer( 5 ), new JLabel("5") );
+		labelTableInit.put( new Integer( 10 ), new JLabel("10") );
+		sliderInitTemp.setLabelTable( labelTableInit );
+		
 		sliders.add(new JLabel("Temperature coefficient: "));
 		sliders.add(sliderTempCoef);
 
@@ -287,8 +296,12 @@ public class GUI implements ActionListener, ChangeListener{
 		sliders.add(new JLabel("Acceptance rate: "));
 		sliders.add(sliderAcceptRate);
 		
-		sliders.add(new JLabel("Iteration number: "));
+		sliders.add(new JLabel("Failure threshold: "));
 		sliders.add(sliderFailureThreshold);
+		
+		sliders.add(new JLabel("Initial temp. multiplier: "));
+		sliders.add(sliderInitTemp);
+
 
 		// ********************************************************
 		// Infos
@@ -364,6 +377,13 @@ public class GUI implements ActionListener, ChangeListener{
         		double value = source.getValue()/1000.;
 
         		System.out.println("Slider temp coef =" + value );
+
+        	}
+        	else if(e.getSource() == sliderInitTemp)
+        	{
+        		double value = source.getValue();
+
+        		System.out.println("Slider init temp =" + value );
 
         	}
         	else
@@ -482,15 +502,15 @@ public class GUI implements ActionListener, ChangeListener{
 					TSP pb = new TSP(data, false, false);
 					
 					SimulatedAnnealingTSPD solv = new SimulatedAnnealingTSPD(pb,
-							(int)Math.pow(data.getNbCity(), 2), 
+							(int)Math.pow(data.getNbCity(), 2)/100, 
 							sliderFailureThreshold.getValue(), 
-							sliderAcceptRate.getValue(), 2, sliderTempCoef.getValue());
+							sliderAcceptRate.getValue()/1000., 2, sliderTempCoef.getValue()/1000., sliderInitTemp.getValue());
 					solv.solve();
 					//**************************************************************************
 					
 					setInitTemp(solv.initialTemperature);
 					setInitCost(solv.initCost);
-					
+					cost = LinearProblem.getSol().getAssociatedValue();	
 					
 				}
 				else
@@ -704,6 +724,16 @@ public class GUI implements ActionListener, ChangeListener{
 
 	public static void setCheckGetTSP(JCheckBox checkGetTSP) {
 		GUI.checkGetTSP = checkGetTSP;
+	}
+
+
+	public static JSlider getSliderInitTemp() {
+		return sliderInitTemp;
+	}
+
+
+	public static void setSliderInitTemp(JSlider sliderInitTemp) {
+		GUI.sliderInitTemp = sliderInitTemp;
 	}
 
 }

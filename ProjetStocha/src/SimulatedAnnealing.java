@@ -53,7 +53,7 @@ public abstract class SimulatedAnnealing
 	 */
 	public void solve()
 	{
-		//On initialise ce qui a besoin de l'être
+		//On initialise ce qui a besoin de l'etre
 		this.currentSol = initSol();
 		LinearProblem.setSol(this.currentSol);
 		this.initTemp();
