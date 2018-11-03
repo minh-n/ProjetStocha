@@ -11,7 +11,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Hashtable;
-import java.util.Timer;
 
 import javax.swing.*;
 
@@ -25,22 +24,15 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import org.omg.CosNaming.NamingContextExtPackage.AddressHelper;
+//import org.omg.CosNaming.NamingContextExtPackage.AddressHelper;
 
 import ilog.concert.IloException;
 
 /**
- * @author shipanda
+ * @author minh-n
  *
  */
-/**
- * @author shipanda
- *
- */
-/**
- * @author shipanda
- *
- */
+
 public class GUI implements ActionListener, ChangeListener{
 
 
@@ -80,11 +72,12 @@ public class GUI implements ActionListener, ChangeListener{
 	private static JFrame frame;
 	private static JPanel panel;
 	private static JPanel menu;
-	
+	private static JLabel recap;
 	
 	//radiobuttons
 	private static JRadioButton buttonStocha;
 	private static JRadioButton buttonDeter;
+	private static boolean isDeter = true;
 
 	private static JComboBox<String> CplexOrAnnealingCombo;
  
@@ -187,7 +180,8 @@ public class GUI implements ActionListener, ChangeListener{
 
 		buttonStocha.addActionListener(this);
 		buttonDeter.addActionListener(this);
-		
+		buttonDeter.setSelected(true);
+
 		ButtonGroup bgroup = new ButtonGroup();
 		
 		bgroup.add(buttonDeter);
@@ -298,31 +292,31 @@ public class GUI implements ActionListener, ChangeListener{
 		Border border3 = BorderFactory.createTitledBorder("Information");
 		informations.setBorder(new CompoundBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0), border3));
 
-
 		timeTaken = new JLabel("The time taken to compute is " + time);
 		totalCost = new JLabel("The total cost of this route is " + cost);
 
 		initialTemp = new JLabel("The initial temperature is " + getInitTemp());
 		initialCost  = new JLabel("The initial cost of this route is " + getInitCost());
 		
+		recap = new JLabel("");
+
+		informations.add(recap);
 		informations.add(timeTaken);
 		informations.add(totalCost);
 		
 		informations.add(initialTemp);
 		informations.add(initialCost);
 		informations.setMaximumSize(dim);
-
 		
 		// ********************************************************
 		// Panel et menu generaux
-
+		
 		menu.add(fcBox);
 		menu.add(checkOptions);
 		menu.add(comboOptions);
 		menu.add(sliders);
 		menu.add(informations);
 		menu.add(new JSeparator(JSeparator.HORIZONTAL));
-		
 		//Start button to start the computation
 		startButton = new JButton("Start the TSP");
         startButton.addActionListener(this);
@@ -435,18 +429,27 @@ public class GUI implements ActionListener, ChangeListener{
 						"| |___|  __/| |___| |___ /  \\ \r\n" + 
 						" \\____|_|   |_____|_____/_/\\_\\\r\n" + 
 						"                              ");
-
-				
-				TSP problem = new TSP(data, false, false);
-				try {
-					CPLEXTSP solver = new CPLEXTSP(problem, false);
-					solver.solve();
-					cost = problem.getCost();
+				if(isDeter)
+				{
+					recap.setText("Solving the deter. prob. with CPLEX.");
+					TSP problem = new TSP(data, false, false);
+					try {
+						CPLEXTSP solver = new CPLEXTSP(problem, false);
+						solver.solve();
+						cost = problem.getCost();
+						setInitTemp(-1);
+						setInitCost(-1);
+					} catch (IloException e1) {
+						e1.printStackTrace();
+					}
+				}
+				else
+				{
+					recap.setText("Stochastic CPLEX not yet implemented!");
 					setInitTemp(-1);
 					setInitCost(-1);
-				} catch (IloException e1) {
-					e1.printStackTrace();
 				}
+
 				
 			}
 			//Index 1 is the simulated annealing
@@ -465,12 +468,51 @@ public class GUI implements ActionListener, ChangeListener{
 						" '----------------'  '----------------'  '----------------'  '----------------'  '----------------'  '----------------' ");
 			
 			
+				if(isDeter)
+				{
+					// TODO 
+					recap.setText("Solving the deter. prob. with the annealing.");
+
+					
+					sliderTempCoef.getValue();
+					
+					sliderAcceptRate.getValue();
+					
+					sliderIteNumber.getValue();
+					
+					
+					
+					setInitTemp(99999991);
+					setInitCost(99999991);
+					
+					
+					
+					
+					
+					
+					
+				}
+				else
+				{
+					// TODO 
+
+					recap.setText("Solving the stocha. prob. with the annealing.");
+
+					setInitTemp(-991);
+					setInitCost(911);
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+				}
+
 			
-			
-			
-			
-				setInitTemp(1);
-				setInitCost(1);
 			
 			
 			
@@ -478,6 +520,8 @@ public class GUI implements ActionListener, ChangeListener{
 			else
 			{
 				System.out.println("No solving! Only displaying.");
+				recap.setText("Displaying a file without solving the problem.");
+
 				setInitTemp(-1);
 				setInitCost(-1);
 			}
@@ -490,11 +534,8 @@ public class GUI implements ActionListener, ChangeListener{
 		       
 			System.out.println("--GUI Debug: It took " + (endTime - startTime) + " milliseconds");
 			
-			//TODO link time and cost, initial temp and cost
 			time = endTime - startTime;
-			//cost = 9000.;
-			//setInitTemp(999.);
-			//setInitCost(8999.);
+
 			
 			if(time > 1000){
 				time /= 1000;
@@ -540,13 +581,12 @@ public class GUI implements ActionListener, ChangeListener{
         if (e.getSource() == buttonStocha) {
  
 			System.out.println("GUI: Solving mode: STOCHASTIC");
-			//TODO : put this information into a boolean
- 
+			isDeter = false;
+			
         } else if (e.getSource() == buttonDeter) {
  
 			System.out.println("GUI: Solving mode: DETERMINISTIC");
-			//TODO : put this information into a boolean
-
+			isDeter = true;
         }
     
     }

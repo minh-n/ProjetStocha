@@ -1,5 +1,4 @@
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -21,9 +20,13 @@ public class DataTSP extends Data{
 	private static String filename;
 	private static boolean verbose;
 	
+	
+	/**
+	 * DataTSP constructor
+	 */
 	public DataTSP()
 	{
-
+		super();
 	}
 	
 
@@ -37,7 +40,7 @@ public class DataTSP extends Data{
 
 		  	//to avoid "Cannot refer to a non-final variable inside an inner class defined in a different method" errors, we copy the parameters into the application
 		  	filename = file;
-		  	verbose = verb;
+		  	setVerbose(verb);
 		  	
 			SAXParserFactory factory = SAXParserFactory.newInstance();
 			SAXParser saxParser = factory.newSAXParser();
@@ -253,5 +256,15 @@ public class DataTSP extends Data{
 	
 	public int getNbCity() {
 		return nbCity;
+	}
+
+
+	public static boolean isVerbose() {
+		return verbose;
+	}
+
+
+	public static void setVerbose(boolean verbose) {
+		DataTSP.verbose = verbose;
 	}
 }

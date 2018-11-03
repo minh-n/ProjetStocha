@@ -2,7 +2,7 @@
 public abstract class Data {
 	
 	
-	
+	public Data() {}
 	/**
 	 * read a file, writing its content to the Data class' variables
 	 * @param file a string containing the path of the file
