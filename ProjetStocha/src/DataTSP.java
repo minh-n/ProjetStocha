@@ -180,7 +180,7 @@ public class DataTSP extends Data{
 		int i = 0;
 		
 		try{
-			for(int j = 0; j < 6; j++)
+			for(i = 0; i < 4; i++)
 				buff.readLine();
 			
 			//System.out.println("IIIIINNNt  = " + Integer.parseInt(buff.readLine().substring(11)));
@@ -188,6 +188,7 @@ public class DataTSP extends Data{
 			
 			buff.readLine(); buff.readLine();
 			
+			i =0;
 			while(true){
 				currentLine = buff.readLine();
 				if(currentLine.charAt(0) == 'E' && currentLine.charAt(1) == 'O' && currentLine.charAt(2) == 'F'){
@@ -195,6 +196,7 @@ public class DataTSP extends Data{
 					}
 				City c = new City(Double.parseDouble(rmEmpty(currentLine).split("\\s+")[1]), 
 						Double.parseDouble(rmEmpty(currentLine).split("\\s+")[2]), i);
+				System.out.println("City " + i + " = " + c);
 				listCity.add(c);
 				i++;
 			}
