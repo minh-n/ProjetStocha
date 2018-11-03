@@ -55,7 +55,7 @@ public class SimulatedAnnealingTSPS extends SimulatedAnnealing{
 			{
 				//on choisi une ville
 				changes[i] = (int)Math.random()*(nbCity-1);
-				//on rechoisis si elle existe déjà dans les villes choisies
+				//on rechoisis si elle existe deja dans les villes choisies
 				for (int j = 0 ; j<i ; j++)
 				{
 					if (changes[i] == changes[j])

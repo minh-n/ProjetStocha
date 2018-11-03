@@ -76,6 +76,9 @@ public class GUI implements ActionListener, ChangeListener{
 
 	private static JComboBox<String> CplexOrAnnealingCombo;
  
+	/**
+	 * The GUI constructor
+	 */
 	public GUI() {
 		citiesPanel =  new GUICitiesPanel();
 		data = new DataTSP();
