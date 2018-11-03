@@ -38,7 +38,11 @@ public class GUI implements ActionListener, ChangeListener{
 	//ce Panneau citiesPanel permettrait d'afficher les villes, il calculerait les coordonnees etc
 	private GUICitiesPanel citiesPanel;
 
+
 	private static JFileChooser fileChooser;
+	private static JCheckBox checkGetTSP;
+	private static boolean getTSP = false;
+
 	private static JButton openButton;
 	private static String currentFilename;
 	private static JLabel whatFile;
@@ -140,9 +144,15 @@ public class GUI implements ActionListener, ChangeListener{
 		fcBox.setBorder(new CompoundBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0), border0));
 		whatFile = new JLabel("Please select a file.");
 			
+		checkGetTSP = new JCheckBox("Get cities position from a TSP file");
+		checkGetTSP.setSelected(false);
+		checkGetTSP.addActionListener(this);
+
 		//openbutton
 		fcBox.add(openButton);
 		fcBox.add(whatFile);
+		fcBox.add(checkGetTSP);
+
 		fcBox.setMaximumSize(dim);
 
         
@@ -360,11 +370,36 @@ public class GUI implements ActionListener, ChangeListener{
             
         }
     }
+   
+    /*Listens to the check boxes. */
+//    public void itemStateChanged(ItemEvent e) {
+//            Object source = e.getItemSelectable();
+//   
+//            if (source == checkGetTSP) {
+//                System.out.println("C'est TSP !!!!!!!!!!!!!!!!!!!");
+//            }
+//
+//            if (e.getStateChange() == ItemEvent.DESELECTED) {
+//                System.out.println("Bail deselect");
+// 
+//            
+//    }
+//
+//    }
     
-    
-
     public void actionPerformed(ActionEvent e) {
-
+        if (e.getSource() == checkGetTSP) {
+           if(getTSP)
+        	{
+        		getTSP = false;
+        	}
+        	else
+        	{
+        		getTSP = true;
+        	}
+        } 
+    	
+    	
         //Handle open button action.
         if (e.getSource() == openButton) {
             int returnVal = fileChooser.showOpenDialog(frame);
@@ -611,6 +646,22 @@ public class GUI implements ActionListener, ChangeListener{
 
 	public static void setInitCost(double initCost) {
 		GUI.initCost = initCost;
+	}
+
+
+	public static boolean isGetTSP() {
+		return getTSP;
+	}
+
+
+
+	public static JCheckBox getCheckGetTSP() {
+		return checkGetTSP;
+	}
+
+
+	public static void setCheckGetTSP(JCheckBox checkGetTSP) {
+		GUI.checkGetTSP = checkGetTSP;
 	}
 
 }

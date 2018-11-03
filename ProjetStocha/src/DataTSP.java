@@ -1,4 +1,11 @@
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import org.xml.sax.Attributes;
@@ -16,8 +23,9 @@ public class DataTSP extends Data{
 	
 	public DataTSP()
 	{
-		//TODO mettre readinFile là dedans
+
 	}
+	
 
 	public void readInputFile(String file, boolean verb)
 	{
@@ -154,6 +162,55 @@ public class DataTSP extends Data{
 	  		System.out.println("DataTSP: Parsing completed sucessfully, data available in Data.matrixCost.");
 		}
 
+
+	public static List<City> parserTSP(String FILENAME){
+		
+		 List<City> listCity = new ArrayList<City>();
+	
+		FileReader f = null;
+		try {
+			f = new FileReader(FILENAME);
+		} catch (FileNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+		String currentLine;
+		BufferedReader buff = new BufferedReader(f);
+		int i = 0;
+		
+		try{
+			for(int j = 0; j < 6; j++)
+				buff.readLine();
+			
+			//System.out.println("IIIIINNNt  = " + Integer.parseInt(buff.readLine().substring(11)));
+	
+			
+			buff.readLine(); buff.readLine();
+			
+			while(true){
+				currentLine = buff.readLine();
+				if(currentLine.charAt(0) == 'E' && currentLine.charAt(1) == 'O' && currentLine.charAt(2) == 'F'){
+					break;
+					}
+				City c = new City(Double.parseDouble(rmEmpty(currentLine).split("\\s+")[1]), 
+						Double.parseDouble(rmEmpty(currentLine).split("\\s+")[2]), i);
+				listCity.add(c);
+				i++;
+			}
+
+		} catch(IOException e){
+			e.printStackTrace();
+		};	
+		
+		return listCity;
+	}
+	
+	private static String rmEmpty(String str){
+		while(str.charAt(0) == ' ')
+			str = str.substring(1);
+		return str;
+	}
 	
 	public void displayMatrix()
 	{

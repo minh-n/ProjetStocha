@@ -27,6 +27,7 @@ public class GUICitiesPanel extends JPanel implements MouseMotionListener, Compo
 
 	private int nbCity;
 	private Rectangle.Double windowSize = new Rectangle.Double();
+	
 
 	public GUICitiesPanel() {
 		citiesPosition = new ArrayList<City>();
@@ -49,14 +50,27 @@ public class GUICitiesPanel extends JPanel implements MouseMotionListener, Compo
 		//getting raw data (the double[][] matrixCost) from the Data class
 		this.matrixCost = new Matrix(data.getMatrixCost());
 		this.nbCity = data.getNbCity();
+		
+		if(GUI.isGetTSP())
+		{
+			System.out.println("\nGUICitiesPanel: Getting cities position with the TSP file." );
+			citiesPosition = DataTSP.parserTSP(GUI.getCurrentFilename().replace("xml", "tsp"));
+
+			setWindowBorders();
+			setCitiesPositionForDisplay();
+		}
+		else
+		{
+			System.out.println("\nGUICitiesPanel: Calculating cities position based on the cost matrix: ");
+			this.getPositionsFromCost(true);
+		}
 
 		//System.out.println("\nGUICitiesPanel: Displaying the cost matrix below: ");
 		//this.matrixCost.print(4, 1);
 
 		// Matrix.print(nb of space for each column, number of digits after the .)
 
-		System.out.println("\nGUICitiesPanel: Calculating cities position based on the cost matrix: ");
-		this.getPositionsFromCost(true);
+		
 	}
 	
 	public void paintPath(Graphics2D g) {
