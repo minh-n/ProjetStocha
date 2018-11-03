@@ -91,21 +91,21 @@ public class SubTourEliminationCPLEX extends IterativeAlgorithm
 			cities.add(i);
 		}
 		
-		for(int i = 0; i < lap.size(); i++) {
-				tour.add(actualCity);
-				cities.remove(actualCity);
-				nextCity = lap.get(actualCity);
-				if(!firstCity.equals(nextCity) && nextCity.intValue() != -1)
-					actualCity = nextCity;
-				else {
-					subtour.add(tour);
-					if(i != lap.size()-1) {
-						actualCity = cities.get(0);
-						firstCity = actualCity;
-						tour = new ArrayList<Integer>(); 
-					}
+		while(cities.size() > 0) {
+			tour.add(actualCity);
+			cities.remove(actualCity);
+			nextCity = lap.get(actualCity);
+			if(!firstCity.equals(nextCity) && nextCity.intValue() != -1) 
+				actualCity = nextCity;
+			else {
+				subtour.add(tour);
+				if(cities.size() > 0) {
+					actualCity = cities.get(0);
+					firstCity = actualCity;
+					tour = new ArrayList<Integer>(); 
 				}
 			}
+		}
 		return subtour;
 	}
 }
