@@ -88,14 +88,16 @@ public class GUICitiesPanel extends JPanel implements MouseMotionListener, Compo
 						//System.out.println("Debug: Link found between city " + i + " and " + j +".");
 						City c1 = citiesPositionForDisplay.get(i);
 						City c2 = citiesPositionForDisplay.get(j);
+						System.out.println(c1 + " LINKED TO " + c2);
 	                    Shape l = new Line2D.Double(c1.getX()+2, c1.getY()+2, c2.getX()+2, c2.getY()+2);
 	                    g.draw(l);
-	                    
+	      
 						break;
 					}
 				}
 			}
 		}
+
 	}
 
 	public void setCitiesPositionForDisplay() {
