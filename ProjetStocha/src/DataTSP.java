@@ -196,7 +196,7 @@ public class DataTSP extends Data{
 					}
 				City c = new City(Double.parseDouble(rmEmpty(currentLine).split("\\s+")[1]), 
 						Double.parseDouble(rmEmpty(currentLine).split("\\s+")[2]), i);
-				System.out.println("City " + i + " = " + c);
+				//System.out.println("City " + i + " = " + c);
 				listCity.add(c);
 				i++;
 			}
