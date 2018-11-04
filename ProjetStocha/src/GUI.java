@@ -90,7 +90,7 @@ public class GUI implements ActionListener, ChangeListener{
 		data = new DataTSP();
 		
 		//TODO: set the correct values for the sliders
-		sliderTempCoef = new JSlider(950, 999, 990);
+		sliderTempCoef = new JSlider(900, 999, 990);
 		sliderAcceptRate = new JSlider(1, 100, 10);
 		sliderFailureThreshold = new JSlider(1, 100, 20);
 		sliderInitTemp = new JSlider(1, 10, 1);
@@ -263,7 +263,7 @@ public class GUI implements ActionListener, ChangeListener{
 
 		@SuppressWarnings("rawtypes")
 		Hashtable labelTableTemp = new Hashtable();
-		labelTableTemp.put( new Integer( 950 ), new JLabel("0.950") );
+		labelTableTemp.put( new Integer( 900 ), new JLabel("0.900") );
 		labelTableTemp.put( new Integer( 999 ), new JLabel("0.999") );
 		labelTableTemp.put( new Integer( 990 ), new JLabel("0.99") );
 		sliderTempCoef.setLabelTable( labelTableTemp );
