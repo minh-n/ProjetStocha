@@ -502,9 +502,9 @@ public class GUI implements ActionListener, ChangeListener{
 					TSP pb = new TSP(data, false, false);
 					
 					SimulatedAnnealingTSPD solv = new SimulatedAnnealingTSPD(pb,
-							(int)Math.pow(data.getNbCity(), 2)*4, 
+							(int)Math.pow(data.getNbCity(), 1), 
 							sliderFailureThreshold.getValue(), 
-							sliderAcceptRate.getValue()/1000., 2, sliderTempCoef.getValue()/1000., sliderInitTemp.getValue());
+							sliderAcceptRate.getValue()/1000., 4, sliderTempCoef.getValue()/1000., sliderInitTemp.getValue());
 					solv.solve();
 					//**************************************************************************
 					
