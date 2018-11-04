@@ -188,10 +188,7 @@ public class DataTSP extends Data{
 
 		String currentLine;
 		BufferedReader buff = new BufferedReader(f);
-		if (f.equals(""))
-		{
-			System.out.println("CACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA##################");
-		}
+
 		int i = 0;
 		
 		try{
@@ -199,7 +196,6 @@ public class DataTSP extends Data{
 				buff.readLine();
 			
 			//System.out.println("IIIIINNNt  = " + Integer.parseInt(buff.readLine().substring(11)));
-	
 			
 			buff.readLine(); buff.readLine();
 			

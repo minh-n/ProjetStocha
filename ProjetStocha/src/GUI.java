@@ -551,22 +551,25 @@ public class GUI implements ActionListener, ChangeListener{
 				}
 				else
 				{
-					// TODO  
+					//**************************************************************************
+					//main Annealing call
+					TSP pb = new TSP(data, false, true);
+					
+					SimulatedAnnealingTSPS solv = new SimulatedAnnealingTSPS(pb,
+							(int)Math.pow(data.getNbCity(), 1), 
+							sliderFailureThreshold.getValue(), 
+							sliderAcceptRate.getValue()/1000., 4, sliderTempCoef.getValue()/1000., sliderInitTemp.getValue(),
+							0.95);
+					solv.solve();
+					System.out.println(solv.accepted+" sol validees et "+solv.rejected+" sol pas viables\n");
+					//**************************************************************************
+					
+					setInitTemp(solv.initialTemperature);
+					setInitCost(solv.initCost);
+					cost = LinearProblem.getSol().getAssociatedValue();	
+					
+					recap.setText("Accepted sol. = " + solv.accepted + ", rejected = " + solv.rejected +".");
 
-					recap.setText("Solving the stocha. prob. with the annealing.");
-
-					setInitTemp(-99999991);
-					setInitCost(9199991);
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
 				}
 
 			
