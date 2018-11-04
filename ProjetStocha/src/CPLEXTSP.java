@@ -185,7 +185,7 @@ public class CPLEXTSP extends CPLEX{
 	
 	/**
 	 * retourne une liste dont l'index i represente la ville i
-	 * chaque ville possede une HashMap contenant en cle le numero j de la ville j et en valeur la variance de l'arc ij minoree de 20%
+	 * chaque ville possede une HashMap contenant en cle le numero j de la ville j et en valeur une variance initialisée aléatoirement de l'arc ij
 	 * @param matrixCost
 	 * @return
 	 */
@@ -196,7 +196,7 @@ public class CPLEXTSP extends CPLEX{
 			HashMap<Integer, Double> actualVariance = new HashMap<Integer, Double>();
 			for(int j = 0; j < nbCities; j++) {
 				if(j != i) 
-					actualVariance.put(j, matrixCost[i][j]*0.2d);
+					actualVariance.put(j, Math.random()*matrixCost[i][j]);
 			}
 			variances.add(actualVariance);
 		}
