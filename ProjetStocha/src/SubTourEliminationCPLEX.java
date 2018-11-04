@@ -67,7 +67,7 @@ public class SubTourEliminationCPLEX extends IterativeAlgorithm
 					final ArrayList<Integer> tmp = subtour.get(i);
 					for(int j = 0; j < tmp.size(); j++) {
 						for(int k = 0; k < tmp.size(); k++) {
-							constraint1c.addTerm(1.0, algo.getMatrixSolution()[tmp.get(j)][tmp.get(k)]);
+							constraint1c.addTerm(1.d, algo.getMatrixSolution()[tmp.get(j)][tmp.get(k)]);
 						}
 					}
 					algo.model.addLe(constraint1c, tmp.size()-1);

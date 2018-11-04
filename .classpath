@@ -4,5 +4,6 @@
 	<classpathentry kind="src" path="ProjetStocha/src"/>
 	<classpathentry kind="lib" path="ProjetStocha/lib/Jama-1.0.3.jar"/>
 	<classpathentry kind="lib" path="C:/Program Files/IBM/ILOG/CPLEX_Studio128/cplex/lib/cplex.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Adrien/Documents/commons-math3-3.6.1-bin/commons-math3-3.6.1/commons-math3-3.6.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

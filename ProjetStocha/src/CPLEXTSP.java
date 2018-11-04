@@ -1,4 +1,10 @@
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import org.apache.commons.math3.distribution.NormalDistribution;
+
 import ilog.concert.*;
+import ilog.cplex.IloCplex;
 
 public class CPLEXTSP extends CPLEX{
 	/**
@@ -7,8 +13,12 @@ public class CPLEXTSP extends CPLEX{
 	 */
 	private IloNumVar[][] matrixSolution; 
 
-	public CPLEXTSP(LinearProblem problem, boolean verbose) throws IloException {
-		super(problem, verbose);
+	public CPLEXTSP(LinearProblem problem, boolean isDeterministic, boolean verbose) throws IloException {
+		super(problem, isDeterministic, verbose);
+	}
+	
+	public CPLEXTSP(LinearProblem problem, boolean isDeterministic, double alpha, boolean verbose) throws IloException {
+		super(problem, isDeterministic, alpha, verbose);
 	}
 
 	/**
@@ -44,6 +54,19 @@ public class CPLEXTSP extends CPLEX{
 			this.setFind(model.solve());
 			result = castMatrixToSolution();
 			result = new SubTourEliminationCPLEX(this).loop();
+			if(!isDeterministic) {
+				endResolution();
+				model = new IloCplex();
+				objective = model.linearNumExpr();
+				addVariables();
+				initializeObjective();
+				minimizeOrMaximize();
+				addConstraints();
+				addConstraint1d(model.getObjValue()*1.25d, alpha);
+				this.setFind(model.solve());
+				result = castMatrixToSolution();
+				result = new SubTourEliminationCPLEX(this).loop();
+			}
 		} catch (IloException e) {
 			e.printStackTrace();
 		}
@@ -90,18 +113,34 @@ public class CPLEXTSP extends CPLEX{
 			IloLinearNumExpr constraint1a = model.linearNumExpr();
 			for(int i = 0; i < nbCities; i++) {
 				if(i != j)
-					constraint1a.addTerm(1.0, matrixSolution[i][j]);
+					constraint1a.addTerm(1.d, matrixSolution[i][j]);
 			}
-			model.addEq(constraint1a, 1.0);
+			model.addEq(constraint1a, 1.d);
 		}
 		
 		for(int i = 0; i < nbCities; i++) {
 			IloLinearNumExpr constraint1b = model.linearNumExpr();
 			for(int j = 0; j < nbCities; j++) {
 				if(j != i)
-					constraint1b.addTerm(1.0, matrixSolution[i][j]);
+					constraint1b.addTerm(1.d, matrixSolution[i][j]);
 			}
-			model.addEq(constraint1b, 1.0);
+			model.addEq(constraint1b, 1.d);
+		}
+	}
+	
+	private void addConstraint1d(double Z, double alpha) throws IloException {
+		int nbCities = ((DataTSP)problem.getData()).getNbCity();
+		final double[][] matrixCost = ((DataTSP)problem.getData()).getMatrixCost();
+		ArrayList<HashMap<Integer, Double>> variances = getVariances(matrixCost);
+		NormalDistribution normalDistribution = new NormalDistribution();
+		double quantileAlpha = normalDistribution.inverseCumulativeProbability(alpha);
+		for(int i = 0; i < nbCities; i++) {
+			IloLinearNumExpr constraint1d = model.linearNumExpr();
+			for(int j = 0; j < nbCities; j++) {
+				if(j != i) 
+					constraint1d.addTerm(matrixCost[i][j] + quantileAlpha*variances.get(i).get(j), matrixSolution[i][j]);	
+			}
+			model.addLe(constraint1d, Z);
 		}
 	}
 
@@ -128,5 +167,19 @@ public class CPLEXTSP extends CPLEX{
 	
 	public IloNumVar[][] getMatrixSolution() {
 		return matrixSolution;
+	}
+	
+	private ArrayList<HashMap<Integer, Double>> getVariances(double[][] matrixCost) {
+		ArrayList<HashMap<Integer, Double>> variances = new ArrayList<HashMap<Integer, Double>>();
+		int nbCities = ((DataTSP)problem.getData()).getNbCity();
+		for(int i = 0; i < nbCities; i++) {
+			HashMap<Integer, Double> actualVariance = new HashMap<Integer, Double>();
+			for(int j = 0; j < nbCities; j++) {
+				if(j != i) 
+					actualVariance.put(j, matrixCost[i][j]*0.2d);
+			}
+			variances.add(actualVariance);
+		}
+		return variances;
 	}
 }

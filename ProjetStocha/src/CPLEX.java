@@ -14,6 +14,16 @@ public abstract class CPLEX extends Solver{
 	protected IloLinearNumExpr objective;
 	
 	/**
+	 * true pour lancer la resolution deterministe du probleme avec CPLEX
+	 */
+	protected boolean isDeterministic;
+	
+	/**
+	 * dans le cas stochastique, alpha represente la contrainte de risque a respecter 
+	 */
+	protected double alpha = 0.95d;
+	
+	/**
 	 * variable a initialiser a la creation d'une instance CPLEX
 	 * true pour afficher dans le canal outstream la sortie de la methode IloCplex.solve()
 	 */
@@ -31,10 +41,33 @@ public abstract class CPLEX extends Solver{
 	 * @param verbose
 	 * @throws IloException
 	 */
-	public CPLEX(LinearProblem problem, boolean verbose) throws IloException {
+	public CPLEX(LinearProblem problem, boolean isDeterministic, boolean verbose) throws IloException {
 		super(problem);
 		model = new IloCplex();
 		objective = model.linearNumExpr();
+		this.isDeterministic = isDeterministic;
+		this.verbose = verbose;
+		addVariables();
+		initializeObjective();
+		minimizeOrMaximize();
+		addConstraints();
+	}
+	
+	/**
+	 * initialise l'instance CPLEX avec un LinearProblem
+	 * initialise la variable model avec les variables, les contraintes, la fonction objective et la contrainte de risque du probleme lineaire
+	 * @param problem
+	 * @param isDeterministic
+	 * @param alpha
+	 * @param verbose
+	 * @throws IloException
+	 */
+	public CPLEX(LinearProblem problem, boolean isDeterministic, double alpha, boolean verbose) throws IloException {
+		super(problem);
+		model = new IloCplex();
+		objective = model.linearNumExpr();
+		this.isDeterministic = isDeterministic;
+		this.alpha = alpha;
 		this.verbose = verbose;
 		addVariables();
 		initializeObjective();
@@ -62,7 +95,7 @@ public abstract class CPLEX extends Solver{
 	
 	/**
 	 * transforme la variable contenant la solution de l'API CPLEX en une instance de Solution 
-	 * @return
+	 * @return 
 	 * @throws IloException
 	 */
 	protected abstract Solution castMatrixToSolution() throws IloException;
@@ -71,7 +104,7 @@ public abstract class CPLEX extends Solver{
 	 * minimise ou maximise la fonction objective selon le probleme lineaire a resoudre
 	 * @throws IloException
 	 */
-	private void minimizeOrMaximize() throws IloException {
+	protected void minimizeOrMaximize() throws IloException {
 		if(problem.getMaxMin()) 
 			model.addMaximize(this.objective); 
 		else
