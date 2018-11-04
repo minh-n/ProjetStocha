@@ -43,7 +43,7 @@ public class SubTourEliminationCPLEX extends IterativeAlgorithm
 				if(!algo.isFind())
 					break;
 				counter++;
-				System.out.println("Subtour Elimination " + counter + ", please wait...");
+				System.out.println("Subtour Elimination " + counter + ", please wait...");				
 			}
 			result = algo.castMatrixToSolution();
 		} catch (IloException e) {

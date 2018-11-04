@@ -1,10 +1,7 @@
 import java.util.ArrayList;
 import java.util.HashMap;
-
 import org.apache.commons.math3.distribution.NormalDistribution;
-
 import ilog.concert.*;
-import ilog.cplex.IloCplex;
 
 public class CPLEXTSP extends CPLEX{
 	/**
@@ -22,12 +19,16 @@ public class CPLEXTSP extends CPLEX{
 	}
 
 	/**
-	 * resout le probleme du voyageur de commerce
+	 * resout le probleme du voyageur de commerce deterministe ou stochastique
 	 * met a jour le cout et la solution du probleme lineaire represente par la variable problem
 	 */
 	@Override
 	protected void solve() {
-		SolutionTSP result = solveWithSubtourElimination(verbose); 
+		SolutionTSP result = new SolutionTSP(); 
+		if(isDeterministic)
+			result = solveWithSubtourElimination(verbose); 
+		else
+			result = solveStochastique();
 		try {
 			if(find) {
 				problem.setCost(model.getObjValue());
@@ -54,21 +55,32 @@ public class CPLEXTSP extends CPLEX{
 			this.setFind(model.solve());
 			result = castMatrixToSolution();
 			result = new SubTourEliminationCPLEX(this).loop();
-			if(!isDeterministic) {
-				endResolution();
-				model = new IloCplex();
-				objective = model.linearNumExpr();
-				addVariables();
-				initializeObjective();
-				minimizeOrMaximize();
-				addConstraints();
-				addConstraint1d(model.getObjValue()*1.25d, alpha);
-				this.setFind(model.solve());
-				result = castMatrixToSolution();
-				result = new SubTourEliminationCPLEX(this).loop();
-			}
 		} catch (IloException e) {
 			e.printStackTrace();
+		}
+		return result;
+	}
+
+	/**
+	 * resout le probleme du voyageur de commerce stochastique
+	 * @return
+	 */
+	private SolutionTSP solveStochastique() {
+		SolutionTSP result = new SolutionTSP(); 
+		if(!isDeterministic) {
+			double Z;
+			try {
+				System.out.println("\nDeterministic resolution of the TSP");
+				result = solveWithSubtourElimination(false); 
+				Z = model.getObjValue()*1.25d;
+				endResolution();
+				initializeModel();
+				addConstraint1d(Z, alpha);
+				System.out.println("\n\nStochastic resolution of the TSP");
+				result = solveWithSubtourElimination(false); 
+			} catch (IloException e) {
+				e.printStackTrace();
+			}
 		}
 		return result;
 	}
@@ -128,6 +140,12 @@ public class CPLEXTSP extends CPLEX{
 		}
 	}
 	
+	/**
+	 * ajoute la contrainte stochastique au modele CPLEX 
+	 * @param Z
+	 * @param alpha
+	 * @throws IloException
+	 */
 	private void addConstraint1d(double Z, double alpha) throws IloException {
 		int nbCities = ((DataTSP)problem.getData()).getNbCity();
 		final double[][] matrixCost = ((DataTSP)problem.getData()).getMatrixCost();
@@ -165,10 +183,12 @@ public class CPLEXTSP extends CPLEX{
 		return null;
 	}
 	
-	public IloNumVar[][] getMatrixSolution() {
-		return matrixSolution;
-	}
-	
+	/**
+	 * retourne une liste dont l'index i represente la ville i
+	 * chaque ville possede une HashMap contenant en cle le numero j de la ville j et en valeur la variance de l'arc ij minoree de 20%
+	 * @param matrixCost
+	 * @return
+	 */
 	private ArrayList<HashMap<Integer, Double>> getVariances(double[][] matrixCost) {
 		ArrayList<HashMap<Integer, Double>> variances = new ArrayList<HashMap<Integer, Double>>();
 		int nbCities = ((DataTSP)problem.getData()).getNbCity();
@@ -181,5 +201,9 @@ public class CPLEXTSP extends CPLEX{
 			variances.add(actualVariance);
 		}
 		return variances;
+	}
+	
+	public IloNumVar[][] getMatrixSolution() {
+		return matrixSolution;
 	}
 }

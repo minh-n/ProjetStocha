@@ -479,7 +479,7 @@ public class GUI implements ActionListener, ChangeListener{
 					recap.setText("Solving the deter. prob. with CPLEX.");
 					TSP problem = new TSP(data, false, false);
 					try {
-						CPLEXTSP solver = new CPLEXTSP(problem, false);
+						CPLEXTSP solver = new CPLEXTSP(problem, isDeter, false);
 						solver.solve();
 						cost = problem.getCost();
 						setInitTemp(-1);
@@ -492,13 +492,18 @@ public class GUI implements ActionListener, ChangeListener{
 				//Stochastic CPLEX
 				else
 				{
-					recap.setText("Stochastic CPLEX not yet implemented!");
-					
-
-					//MON ALPHA EST ICI !!!!!!!!!!!!
+					recap.setText("Solving the stocha. prob. with CPLEX.");
+					TSP problem = new TSP(data, false, true);
 					double alpha = sliderAlpha.getValue()/100.;
-					
-					
+					try {
+						CPLEXTSP solver = new CPLEXTSP(problem, isDeter, alpha, false);
+						solver.solve();
+						cost = problem.getCost();
+						setInitTemp(-1);
+						setInitCost(-1);
+					} catch (IloException e1) {
+						e1.printStackTrace();
+					}
 					
 					setInitTemp(-1);
 					setInitCost(-1);

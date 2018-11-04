@@ -55,7 +55,6 @@ public abstract class CPLEX extends Solver{
 	
 	/**
 	 * initialise l'instance CPLEX avec un LinearProblem
-	 * initialise la variable model avec les variables, les contraintes, la fonction objective et la contrainte de risque du probleme lineaire
 	 * @param problem
 	 * @param isDeterministic
 	 * @param alpha
@@ -64,11 +63,19 @@ public abstract class CPLEX extends Solver{
 	 */
 	public CPLEX(LinearProblem problem, boolean isDeterministic, double alpha, boolean verbose) throws IloException {
 		super(problem);
-		model = new IloCplex();
-		objective = model.linearNumExpr();
+		initializeModel();
 		this.isDeterministic = isDeterministic;
 		this.alpha = alpha;
 		this.verbose = verbose;
+	}
+	
+	/**
+	 * initialise la variable model avec les variables, les contraintes et la fonction objective du probleme lineaire
+	 * @throws IloException
+	 */
+	protected void initializeModel() throws IloException {
+		model = new IloCplex();
+		objective = model.linearNumExpr();
 		addVariables();
 		initializeObjective();
 		minimizeOrMaximize();
