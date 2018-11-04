@@ -57,6 +57,7 @@ public class GUI implements ActionListener, ChangeListener{
 	private static JSlider sliderAcceptRate;
 	private static JSlider sliderFailureThreshold;
 	private static JSlider sliderInitTemp;
+	private static JSlider sliderAlpha;
 
 	
 	//infos
@@ -94,6 +95,7 @@ public class GUI implements ActionListener, ChangeListener{
 		sliderAcceptRate = new JSlider(1, 100, 10);
 		sliderFailureThreshold = new JSlider(1, 100, 20);
 		sliderInitTemp = new JSlider(1, 10, 1);
+		sliderAlpha = new JSlider(90, 99, 95);
 
 	}
 
@@ -248,18 +250,20 @@ public class GUI implements ActionListener, ChangeListener{
 		// Sliders
 		
 		JPanel sliders = new JPanel(new GridLayout(0, 1));
-		Border border6 = BorderFactory.createTitledBorder("Annealing parameters");
-		sliders.setBorder(new CompoundBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0), border6));
+		Border border6 = BorderFactory.createTitledBorder("Parameters");
+		sliders.setBorder(new CompoundBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0), border6));
 
 		sliderTempCoef.setPaintLabels(true);
 		sliderAcceptRate.setPaintLabels(true);
 		sliderFailureThreshold.setPaintLabels(true);
 		sliderInitTemp.setPaintLabels(true);
+		sliderAlpha.setPaintLabels(true);
 
 		sliderFailureThreshold.addChangeListener(this);
 		sliderAcceptRate.addChangeListener(this);
 		sliderTempCoef.addChangeListener(this);
 		sliderInitTemp.addChangeListener(this);
+		sliderAlpha.addChangeListener(this);
 
 		@SuppressWarnings("rawtypes")
 		Hashtable labelTableTemp = new Hashtable();
@@ -289,9 +293,15 @@ public class GUI implements ActionListener, ChangeListener{
 		labelTableInit.put( new Integer( 10 ), new JLabel("10") );
 		sliderInitTemp.setLabelTable( labelTableInit );
 		
+		@SuppressWarnings("rawtypes")
+		Hashtable labelAlpha = new Hashtable();
+		labelAlpha.put( new Integer( 90 ), new JLabel("90") );
+		labelAlpha.put( new Integer( 95 ), new JLabel("95") );
+		labelAlpha.put( new Integer( 99 ), new JLabel("99") );
+		sliderAlpha.setLabelTable( labelAlpha );
+		
 		sliders.add(new JLabel("Temperature coefficient: "));
 		sliders.add(sliderTempCoef);
-
 		
 		sliders.add(new JLabel("Acceptance rate: "));
 		sliders.add(sliderAcceptRate);
@@ -302,7 +312,8 @@ public class GUI implements ActionListener, ChangeListener{
 		sliders.add(new JLabel("Initial temp. multiplier: "));
 		sliders.add(sliderInitTemp);
 
-
+		sliders.add(new JLabel("Alpha: "));
+		sliders.add(sliderAlpha);
 		// ********************************************************
 		// Infos
 		
@@ -384,6 +395,13 @@ public class GUI implements ActionListener, ChangeListener{
         		double value = source.getValue();
 
         		System.out.println("Slider init temp =" + value );
+
+        	}
+        	else if(e.getSource() == sliderAlpha)
+        	{
+        		double value = source.getValue()/100.;
+
+        		System.out.println("Slider sliderAlpha =" + value );
 
         	}
         	else
@@ -470,9 +488,18 @@ public class GUI implements ActionListener, ChangeListener{
 						e1.printStackTrace();
 					}
 				}
+				
+				//Stochastic CPLEX
 				else
 				{
 					recap.setText("Stochastic CPLEX not yet implemented!");
+					
+
+					//MON ALPHA EST ICI !!!!!!!!!!!!
+					double alpha = sliderAlpha.getValue()/100.;
+					
+					
+					
 					setInitTemp(-1);
 					setInitCost(-1);
 				}
@@ -519,12 +546,12 @@ public class GUI implements ActionListener, ChangeListener{
 				}
 				else
 				{
-					// TODO 
+					// TODO  
 
 					recap.setText("Solving the stocha. prob. with the annealing.");
 
-					setInitTemp(-991);
-					setInitCost(911);
+					setInitTemp(-99999991);
+					setInitCost(9199991);
 					
 					
 					
