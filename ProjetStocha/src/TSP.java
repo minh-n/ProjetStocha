@@ -36,17 +36,25 @@ public class TSP extends LinearProblem{
 	
 	public void genVar()
 	{
-		this.var = (int)Math.random()*15+5;
+		this.setVar((int)Math.random()*15+5);
 	}
 	
 	public void genVar(int val)
 	{
-		this.var = val;
+		this.setVar(val);
 	}
 	
 	public boolean getIsStocha()
 	{
 		return this.isStocha;
+	}
+
+	public int getVar() {
+		return var;
+	}
+
+	public void setVar(int var) {
+		this.var = var;
 	}
 	
 }
