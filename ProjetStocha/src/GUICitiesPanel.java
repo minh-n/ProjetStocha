@@ -233,10 +233,12 @@ public class GUICitiesPanel extends JPanel implements MouseMotionListener, Compo
 			}
 		}
 
+		//creating X matrix (V*D)
 		Matrix X = eigV.times(eigD);
 
 		// filling the cities position
 		for (int i = 0; i < X.getColumnDimension(); i++) {
+			//getting the cities position from the last two columns of X
 			for (int j = X.getRowDimension() - 2; j < X.getRowDimension(); j = j + 2) {
 				City city = new City(X.get(i, j), X.get(i, j + 1), id);
 				citiesPosition.add(city);
@@ -257,11 +259,6 @@ public class GUICitiesPanel extends JPanel implements MouseMotionListener, Compo
 					double v2 = matrixCost.get(i, j);
 
 					diff += Math.abs(v1 - v2) / ((Math.abs(v1 + v2) / 2));
-//					int rounded = (int) Math.round();
-//					if(rounded == Math.round()
-//					{
-//						nbCorrect++;
-//					}
 				}
 			}
 
