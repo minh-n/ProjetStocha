@@ -5,43 +5,59 @@ import ilog.concert.*;
 
 public class SubTourEliminationCPLEX extends IterativeAlgorithm
 {
+	/**
+	 * instance de CPLEX sur laquelle l'ajout de la contrainte de sous-tours est faite
+	 */
 	private CPLEXTSP algo;
 	
 	public SubTourEliminationCPLEX(CPLEXTSP algo) {
 		this.algo = algo; 
 	}
-
+	
+	/**
+	 * ajoute la contrainte de sous-tours au modele de cplex et le resout
+	 */
 	@Override
-	protected SolutionTSP oracle() {
-		SolutionTSP result = new SolutionTSP();
+	protected boolean oracle() {
+		boolean subtour = false;
 		try {
+			SolutionTSP result = algo.castMatrixToSolution();
+			subtour = addConstraint1c(result);
 			algo.setFind(algo.getModel().solve());
-			result = algo.castMatrixToSolution();
 		} catch (IloException e) {
 			e.printStackTrace();
 		}
-		return result;
+		return subtour;
 	}
 
+	/**
+	 * ajoute la contrainte de sous-tours jusqu'a la resolution du probleme
+	 */
 	@Override
 	protected SolutionTSP loop() {
 		int counter = 1;
 		SolutionTSP result = new SolutionTSP();
 		try {
-			result = algo.castMatrixToSolution();
-			while(addConstraint1c(result)) {
-				System.out.println("Subtour Elimination " + counter + ", please wait...");
-				counter++;
-				result = oracle();
+			System.out.println("Subtour Elimination " + counter + ", please wait...");
+			while(oracle()) {
 				if(!algo.isFind())
 					break;
+				counter++;
+				System.out.println("Subtour Elimination " + counter + ", please wait...");
 			}
+			result = algo.castMatrixToSolution();
 		} catch (IloException e) {
 			e.printStackTrace();
 		}
 		return result;
 	}
 	
+	/**
+	 * ajoute la contrainte de sous-tours au modele du probleme  
+	 * @param solution
+	 * @return
+	 * @throws IloException
+	 */
 	private boolean addConstraint1c(SolutionTSP solution) throws IloException {
 		if(algo.isFind()) {
 			ArrayList<ArrayList<Integer>> subtour = createSubtour(createLap(solution));
@@ -62,6 +78,11 @@ public class SubTourEliminationCPLEX extends IterativeAlgorithm
 		return false;
 	}
 	
+	/**
+	 * creee une hashmap contenant le numero de la ville en cle et le numero de la ville suivante dans circuit en valeur 
+	 * @param solution
+	 * @return
+	 */
 	private HashMap<Integer, Integer> createLap(SolutionTSP solution) {
 		HashMap<Integer, Integer> lap = new HashMap<Integer, Integer>();
 		final int[][] matrixSolution = solution.getSol();
@@ -79,6 +100,12 @@ public class SubTourEliminationCPLEX extends IterativeAlgorithm
 		return lap;
 	}
 	
+	/**
+	 * creee une liste contenant les sous-tours d'un circuit
+	 * chaque sous-tour contient les numeros de ville present dans le sous-tour
+	 * @param lap
+	 * @return
+	 */
 	private ArrayList<ArrayList<Integer>> createSubtour(HashMap<Integer, Integer> lap) {
 		Integer actualCity = 0;
 		Integer firstCity = 0;

@@ -1,12 +1,20 @@
 import ilog.concert.*;
 
 public class CPLEXTSP extends CPLEX{
+	/**
+	 * matrice representant la solution d'un probleme du voyageur de commerce
+	 * true si l'arc represente par matrixSolution[villeI][villeJ] est retenu dans le circuit
+	 */
 	private IloNumVar[][] matrixSolution; 
 
 	public CPLEXTSP(LinearProblem problem, boolean verbose) throws IloException {
 		super(problem, verbose);
 	}
 
+	/**
+	 * resout le probleme du voyageur de commerce
+	 * met a jour le cout et la solution du probleme lineaire represente par la variable problem
+	 */
 	@Override
 	protected void solve() {
 		SolutionTSP result = solveWithSubtourElimination(verbose); 
@@ -21,6 +29,11 @@ public class CPLEXTSP extends CPLEX{
 		}
 	}
 	
+	/**
+	 * resout le probleme du voyageur de commerce en ajoutant iterativement la contrainte sur les sous-tours
+	 * @param verbose
+	 * @return
+	 */
 	private SolutionTSP solveWithSubtourElimination(boolean verbose) {
 		SolutionTSP result = new SolutionTSP(); 
 		try {
@@ -37,6 +50,9 @@ public class CPLEXTSP extends CPLEX{
 		return result;
 	}
 	
+	/**
+	 * ajoute une matrice de boolean representant la solution du TSP au modele
+	 */
 	@Override
 	protected void addVariables() throws IloException {
 		int nbCities = ((DataTSP)problem.getData()).getNbCity();
@@ -48,6 +64,9 @@ public class CPLEXTSP extends CPLEX{
 		}
 	}
 
+	/**
+	 * initialise la fonction objective du probleme du voyageur de commerce
+	 */
 	@Override
 	protected void initializeObjective() throws IloException {
 		int nbCities = ((DataTSP)problem.getData()).getNbCity();
@@ -60,6 +79,10 @@ public class CPLEXTSP extends CPLEX{
 		}
 	}
 
+	/**
+	 * ajoute la contrainte "un unique arc entrant par ville"
+	 * ajoute la contrainte "un unique arc sortant par ville"
+	 */
 	@Override
 	protected void addConstraints() throws IloException {
 		int nbCities = ((DataTSP)problem.getData()).getNbCity();
@@ -82,6 +105,9 @@ public class CPLEXTSP extends CPLEX{
 		}
 	}
 
+	/**
+	 * retourne une instance de SolutionTSP representant la solution du probleme
+	 */
 	@Override
 	protected SolutionTSP castMatrixToSolution() throws IloException {
 		if(find) {
