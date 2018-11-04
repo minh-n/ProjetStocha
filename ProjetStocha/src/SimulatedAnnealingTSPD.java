@@ -73,7 +73,7 @@ public class SimulatedAnnealingTSPD extends SimulatedAnnealing{
 	 */
 	public SolutionTSP initSol()
 	{
-		/*
+		
 		// VILLE 1 PUIS VILLE 2 PUIS VILLE 3 ETC...
 		SolutionTSP sol = new SolutionTSP();
 		int nbCity = ((DataTSP)this.pb.getData()).getNbCity();
@@ -86,9 +86,9 @@ public class SimulatedAnnealingTSPD extends SimulatedAnnealing{
 		sol.setAssociatedValue(this.pb.objectiveFunction(sol));
 		initCost = sol.getAssociatedValue();
 
-		return sol;*/
+		return sol;
 		
-		//PLUS PROCHE VOISIN
+		/*//PLUS PROCHE VOISIN
 		SolutionTSP sol = new SolutionTSP();
 		int nbCity = ((DataTSP)this.pb.getData()).getNbCity();
 		int solVal[] = new int[nbCity];
@@ -124,7 +124,7 @@ public class SimulatedAnnealingTSPD extends SimulatedAnnealing{
 		initCost = sol.getAssociatedValue();
 
 		return sol;
-
+*/
 	}
 	
 	
