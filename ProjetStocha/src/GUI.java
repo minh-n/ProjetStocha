@@ -447,6 +447,8 @@ public class GUI implements ActionListener, ChangeListener{
 			//Index 0 is CPLEX
 			if(CplexOrAnnealingCombo.getSelectedIndex() == 0)
 			{
+				citiesPanel.isPaintPath = true;
+
 				System.out.println("                              \r\n" + 
 						"  ____ ____  _     _______  __\r\n" + 
 						" / ___|  _ \\| |   | ____\\ \\/ /\r\n" + 
@@ -480,6 +482,8 @@ public class GUI implements ActionListener, ChangeListener{
 			//Index 1 is the simulated annealing
 			else if (CplexOrAnnealingCombo.getSelectedIndex() == 1)
 			{
+				citiesPanel.isPaintPath = true;
+
 				System.out.println(" .----------------.  .----------------.  .----------------.  .----------------.  .----------------.  .----------------. \r\n" + 
 						"| .--------------. || .--------------. || .--------------. || .--------------. || .--------------. || .--------------. |\r\n" + 
 						"| |  _______     | || |  _________   | || |     ______   | || | _____  _____ | || |     _____    | || |  _________   | |\r\n" + 
@@ -542,7 +546,7 @@ public class GUI implements ActionListener, ChangeListener{
 			{
 				System.out.println("No solving! Only displaying.");
 				recap.setText("Displaying a file without solving the problem.");
-
+				citiesPanel.isPaintPath = false;
 				setInitTemp(-1);
 				setInitCost(-1);
 			}

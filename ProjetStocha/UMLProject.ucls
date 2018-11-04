@@ -3,7 +3,7 @@
   associations="true" dependencies="false" nesting-relationships="true" router="FAN">  
   <class id="1" language="java" name="SolutionTSP" project="ProjetStocha" file="/ProjetStocha/src/SolutionTSP.java" 
     binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="992" y="1319"/>    
+    <position height="-1" width="-1" x="696" y="667"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -12,7 +12,7 @@
   </class>  
   <class id="2" language="java" name="Solver" project="ProjetStocha" file="/ProjetStocha/src/Solver.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="881" y="408"/>    
+    <position height="-1" width="-1" x="989" y="84"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -21,7 +21,7 @@
   </class>  
   <class id="3" language="java" name="IterativeAlgorithm" project="ProjetStocha" 
     file="/ProjetStocha/src/IterativeAlgorithm.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="645" y="802"/>    
+    <position height="-1" width="-1" x="1513" y="1014"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -30,7 +30,7 @@
   </class>  
   <class id="4" language="java" name="LinearProblem" project="ProjetStocha" file="/ProjetStocha/src/LinearProblem.java" 
     binary="false" corner="BOTTOM_RIGHT">    
-    <position height="333" width="271" x="1020" y="520"/>    
+    <position height="-1" width="-1" x="1267" y="606"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -39,7 +39,7 @@
   </class>  
   <class id="5" language="java" name="SimulatedAnnealingTSPS" project="ProjetStocha" 
     file="/ProjetStocha/src/SimulatedAnnealingTSPS.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1517" y="861"/>    
+    <position height="-1" width="-1" x="1889" y="441"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -48,7 +48,7 @@
   </class>  
   <class id="6" language="java" name="CPLEX" project="ProjetStocha" file="/ProjetStocha/src/CPLEX.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="315" width="181" x="778" y="520"/>    
+    <position height="-1" width="-1" x="760" y="237"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -57,7 +57,7 @@
   </class>  
   <class id="7" language="java" name="DataTSP" project="ProjetStocha" file="/ProjetStocha/src/DataTSP.java" 
     binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1198" y="1313"/>    
+    <position height="-1" width="-1" x="1306" y="197"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -66,7 +66,7 @@
   </class>  
   <class id="8" language="java" name="SubTourEliminationCPLEX" project="ProjetStocha" 
     file="/ProjetStocha/src/SubTourEliminationCPLEX.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="626" y="971"/>    
+    <position height="-1" width="-1" x="1234" y="991"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -75,7 +75,7 @@
   </class>  
   <class id="9" language="java" name="GUI" project="ProjetStocha" file="/ProjetStocha/src/GUI.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="2190" y="912"/>    
+    <position height="-1" width="-1" x="2238" y="584"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -84,7 +84,7 @@
   </class>  
   <class id="10" language="java" name="SimulatedAnnealing" project="ProjetStocha" 
     file="/ProjetStocha/src/SimulatedAnnealing.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1509" y="540"/>    
+    <position height="-1" width="-1" x="1569" y="220"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -93,7 +93,7 @@
   </class>  
   <class id="11" language="java" name="GUICitiesPanel" project="ProjetStocha" 
     file="/ProjetStocha/src/GUICitiesPanel.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1926" y="1198"/>    
+    <position height="-1" width="-1" x="1862" y="930"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -102,7 +102,7 @@
   </class>  
   <class id="12" language="java" name="Solution" project="ProjetStocha" file="/ProjetStocha/src/Solution.java" 
     binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="980" y="989"/>    
+    <position height="-1" width="-1" x="988" y="617"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -111,7 +111,7 @@
   </class>  
   <class id="13" language="java" name="TSP" project="ProjetStocha" file="/ProjetStocha/src/TSP.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1410" y="1087"/>    
+    <position height="-1" width="-1" x="1538" y="851"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -120,7 +120,7 @@
   </class>  
   <class id="14" language="java" name="SimulatedAnnealingTSPD" project="ProjetStocha" 
     file="/ProjetStocha/src/SimulatedAnnealingTSPD.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1871" y="578"/>    
+    <position height="-1" width="-1" x="1915" y="178"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -129,7 +129,7 @@
   </class>  
   <class id="15" language="java" name="CPLEXTSP" project="ProjetStocha" file="/ProjetStocha/src/CPLEXTSP.java" 
     binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="749" y="1266"/>    
+    <position height="-1" width="-1" x="881" y="970"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -138,7 +138,7 @@
   </class>  
   <class id="16" language="java" name="City" project="ProjetStocha" file="/ProjetStocha/src/City.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1646" y="1143"/>    
+    <position height="-1" width="-1" x="1546" y="583"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -147,7 +147,7 @@
   </class>  
   <class id="17" language="java" name="Data" project="ProjetStocha" file="/ProjetStocha/src/Data.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1195" y="1042"/>    
+    <position height="-1" width="-1" x="967" y="346"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -156,7 +156,7 @@
   </class>  
   <class id="18" language="java" name="Manager" project="ProjetStocha" file="/ProjetStocha/src/Manager.java" 
     binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1654" y="1380"/>    
+    <position height="-1" width="-1" x="1838" y="632"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -240,7 +240,7 @@
     <end type="TARGET" refId="17"/>  
   </generalization>  
   <association id="44">    
-    <bendpoint x="1550" y="984"/>    
+    <bendpoint x="1422" y="404"/>    
     <end type="SOURCE" refId="9" navigable="false">      
       <attribute id="45" name="data"/>      
       <multiplicity id="46" minimum="0" maximum="1"/>    
@@ -269,7 +269,7 @@
     <display labels="true" multiplicity="true"/>  
   </association>  
   <association id="54">    
-    <bendpoint x="996" y="450"/>    
+    <bendpoint x="1122" y="400"/>    
     <end type="SOURCE" refId="10" navigable="false">      
       <attribute id="55" name="currentSol"/>      
       <multiplicity id="56" minimum="0" maximum="1"/>    

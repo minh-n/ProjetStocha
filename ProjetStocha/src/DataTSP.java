@@ -188,6 +188,10 @@ public class DataTSP extends Data{
 
 		String currentLine;
 		BufferedReader buff = new BufferedReader(f);
+		if (f.equals(""))
+		{
+			System.out.println("CACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA##################");
+		}
 		int i = 0;
 		
 		try{

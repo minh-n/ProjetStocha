@@ -27,7 +27,7 @@ public class GUICitiesPanel extends JPanel implements MouseMotionListener, Compo
 
 	private int nbCity;
 	private Rectangle.Double windowSize = new Rectangle.Double();
-	
+	public boolean isPaintPath = true;
 
 	public GUICitiesPanel() {
 		citiesPosition = new ArrayList<City>();
@@ -195,7 +195,10 @@ public class GUICitiesPanel extends JPanel implements MouseMotionListener, Compo
 			g.fillRect((int) c.getX(), (int) c.getY(), 4, 4);
 
 		}
-		this.paintPath(g);
+		if(isPaintPath)
+		{
+			this.paintPath(g);
+		}
 	}
 
 	/**
