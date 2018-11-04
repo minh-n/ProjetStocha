@@ -114,7 +114,7 @@ public abstract class SimulatedAnnealing
 				
 		}
 		
-		this.acceptationRate = nbAccepted/this.nbIteration;
+		this.acceptationRate = (double) nbAccepted/this.nbIteration;
 		
 	}
 	
