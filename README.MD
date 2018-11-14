@@ -53,9 +53,13 @@ Le problème du voyageur est reformulé en une fonction objectif et cinq contrai
 Fonction objectif : elle nous indique que le but du problème est de minimiser la somme du coût de tous les arcs empruntés par le voyageur.
 
 **Contrainte (1a)** : La somme de tous les coefficients xij correspondant à une ville doit valoir 1, et ce pour chaque ville. Dans le parcours du voyageur, une ville i ne peut donc posséder qu’un seul chemin se dirigeant vers une ville j. Cela signifie que l’on ne sort qu’une seule fois de chaque ville.
+
 **Contrainte (1b)** : Idem : on ne rentre qu’une seule fois dans chaque ville.
+
 **Contrainte (1c)** : Soit S un sous ensemble de ville de cardinalité |S|. Si il y a |S| arcs ou plus reliant les villes de ce sous-ensemble, alors cela veut dire que l’ensemble est un sous-tour de la solution totale, et donc que la solution n’est pas acceptable.
+
 **Contrainte (1d)** : C’est la contrainte de probabilité. La solution donnée par CPLEX doit pouvoir être de qualité proche de la solution déterministe du problème (notée Z) au moins une certaine partie du temps (notée 𝞪).
+
 **Contrainte (1e)** : assure le bon format des éléments manipulés dans le problème 
 
 
