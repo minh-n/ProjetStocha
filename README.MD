@@ -10,7 +10,7 @@ Nous allons implémenter un algorithme visant à résoudre ce problème de mani�
 
 ### Pré-requis
 
-Les librairies utilisées dans ce projet sont ```CPLEX, Apache Common Maths```.
+Les librairies utilisées dans ce projet sont ```CPLEX, Jama, Apache Common Maths```.
 
 Le projet a été codé sous Eclipse : l'utilisateur devrait pouvoir lancer celui-ci en ouvrant le projet, puis en mettant le chemin de la librairie CPLEX dans le build path du projet.
 
