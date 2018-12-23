@@ -4,7 +4,9 @@
 
 Ce projet vise à proposer une solution au célèbre problème du voyageur de commerce : le voyageur doit passer par un ensemble de villes, avec la contrainte de ne passer qu’une seule fois par ville, de minimiser son temps de trajet et de retourner à la ville de départ.  
 
-Nous allons implémenter un algorithme visant à résoudre ce problème de manière optimisée : le recuit simulé, qui sera détaillé par la suite, ainsi que le solveur CPLEX. Ces deux outils vont nous permettre de résoudre le problème d'une manière déterministe mais également stochastique.
+Nous avons implémenté un algorithme visant à résoudre ce problème de manière optimisée : le recuit simulé, qui sera détaillé par la suite, ainsi que le solveur CPLEX. Ces deux outils vont nous permettre de résoudre le problème d'une manière déterministe mais également stochastique.
+
+Note obtenue : 15/20
 
 ## Fonctionnement
 
